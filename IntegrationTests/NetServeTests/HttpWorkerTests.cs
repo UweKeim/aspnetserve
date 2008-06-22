@@ -18,12 +18,12 @@ namespace IntegrationTests.NetServeTests {
     public class HttpWorkerTests {
         [Test]
         public void MachineConfigPathTest() {
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(string.Format("{0}CONFIG\\machine.config", HttpRuntime.AspInstallDirectory), worker.MachineConfigPath);
         }
         [Test]
         public void MachineInstallDirectoryTest() {
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(HttpRuntime.AspInstallDirectory, worker.MachineInstallDirectory);
         }
         [Test]
@@ -34,26 +34,26 @@ namespace IntegrationTests.NetServeTests {
              */ 
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.RequestTraceIdentifier, worker.RequestTraceIdentifier);
         }
         [Test]
         public void RootWebConfigPathTest() {
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(string.Format("{0}CONFIG\\web.config", HttpRuntime.AspInstallDirectory), worker.RootWebConfigPath);
         }
         [Test]
         public void GetAppPathTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetAppPath(), worker.GetAppPath());
         }
         [Test]
         public void GetAppPathTranslatedTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetAppPathTranslated(), worker.GetAppPathTranslated());
         }
         [Ignore]
@@ -64,7 +64,7 @@ namespace IntegrationTests.NetServeTests {
              */ 
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetAppPoolID(), worker.GetAppPoolID());
         }
         //GetBytesRead 
@@ -79,21 +79,21 @@ namespace IntegrationTests.NetServeTests {
         public void GetFilePathTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetFilePath(), worker.GetFilePath());
         }
         [Test]
         public void GetFilePathTranslatedTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetFilePathTranslated(), worker.GetFilePathTranslated());
         }
         [Test]
         public void GetHttpVerbNameTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetHttpVerbName(), worker.GetHttpVerbName());
         }
         //GetHttpVersion
@@ -106,7 +106,7 @@ namespace IntegrationTests.NetServeTests {
         public void GetLocalAddressTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetLocalAddress(), worker.GetLocalAddress());
         }
         //GetLocalPort 
@@ -114,7 +114,7 @@ namespace IntegrationTests.NetServeTests {
         public void GetPathInfoTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetPathInfo(), worker.GetPathInfo());
         }
         //GetPreloadedEntityBody 
@@ -126,7 +126,7 @@ namespace IntegrationTests.NetServeTests {
         public void GetRawUrlTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetRawUrl(), worker.GetRawUrl());
         }
         //GetRemoteAddress 
@@ -134,7 +134,7 @@ namespace IntegrationTests.NetServeTests {
         public void GetRemoteNameTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetRemoteName(), worker.GetRemoteName());
         }
         //GetRemotePort 
@@ -143,7 +143,7 @@ namespace IntegrationTests.NetServeTests {
         public void GetServerNameTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetServerName(), worker.GetServerName());
         }
         //GetServerVariable 
@@ -155,14 +155,14 @@ namespace IntegrationTests.NetServeTests {
         public void GetUriPathTest() {
             SimpleWorkerRequest reference = new SimpleWorkerRequest("/webapp", "c:\\webapp\\", "default.aspx", "", null);
 
-            AspNetWorkerRequest worker = GetHttpWorker("/webapp", "c:\\webapp\\");
+            AspNetWorker worker = GetHttpWorker("/webapp", "c:\\webapp\\");
             Assert.AreEqual(reference.GetUriPath(), worker.GetUriPath());
         }
         //GetUrlContextID 
         //GetUserToken 
         //GetVirtualPathToken 
     //----------------------------------------------------
-        private AspNetWorkerRequest GetHttpWorker(string virtualDir, string physicalDir) {
+        private AspNetWorker GetHttpWorker(string virtualDir, string physicalDir) {
             throw new Exception();
             //Request request = new Request();
             //request.HttpMethod = "GET";

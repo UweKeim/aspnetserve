@@ -20,7 +20,7 @@ namespace aspNETserve.Core {
     /// AppDomain.
     /// </summary>
     public sealed class DomainHook : MarshalByRefObject, IRegisteredObject, IDisposable {
-        private IAspNetWorkerRequest _worker = null;
+        private IAspNetWorker _worker = null;
 
         public DomainHook() {
             HostingEnvironment.RegisterObject(this);
@@ -44,7 +44,7 @@ namespace aspNETserve.Core {
 
             AspNetRuntime aspNetRuntime = new AspNetRuntime();
 
-            _worker = new AspNetWorkerRequest(aspNetRuntime, virtualDir, physicalDir, serverVariables);
+            _worker = new AspNetWorker(aspNetRuntime, virtualDir, physicalDir, serverVariables);
         }
 
         public void ProcessTransaction(ITransaction transaction) {

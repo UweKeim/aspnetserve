@@ -14,7 +14,7 @@ namespace aspNETserve.Core {
     /// An IAspNetWorker does all the dirty work
     /// of handling a request, and generating a response.
     /// </summary>
-    public interface IAspNetWorkerRequest {
+    public interface IAspNetWorker {
         void ProcessTransaction(ITransaction transaction);
         IDictionary<string, string> ServerVariables { set; get; }
     }

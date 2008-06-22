@@ -11,6 +11,6 @@ using System.Text;
 
 namespace aspNETserve.Core {
     public interface IAspNetRuntime {
-        void ProcessRequest(IAspNetWorkerRequest aspNetWorkerRequest);
+        void ProcessRequest(IAspNetWorker aspNetWorkerRequest);
     }
 }

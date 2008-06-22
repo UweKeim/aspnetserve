@@ -13,7 +13,7 @@ using System.Web;
 namespace aspNETserve.Core {
     public class AspNetRuntime : IAspNetRuntime {
 
-        public void ProcessRequest(IAspNetWorkerRequest aspNetWorkerRequest) {
+        public void ProcessRequest(IAspNetWorker aspNetWorkerRequest) {
             //TODO: Find a way to prevent the IAspNetWorkerRequest implementation
             //from also having to be a HttpWorkerRequest. Perhaps some type of a 
             //proxy object.

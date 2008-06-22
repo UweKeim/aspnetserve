@@ -13,16 +13,16 @@ using System.Web.Hosting;
 using System.IO;
 
 namespace aspNETserve.Core {
-    public sealed class AspNetWorkerRequest : HttpWorkerRequest, IAspNetWorkerRequest {
+    public sealed class AspNetWorker : HttpWorkerRequest, IAspNetWorker {
 
-        public AspNetWorkerRequest(IAspNetRuntime aspNetWorker, string virtualDir, string physicalDir)  {
+        public AspNetWorker(IAspNetRuntime aspNetWorker, string virtualDir, string physicalDir)  {
             _physicalDir = physicalDir;
             _virtualDir = virtualDir;
             _aspNetWorker = aspNetWorker;
             _serverVariables = new Dictionary<string, string>();
         }
 
-        public AspNetWorkerRequest(IAspNetRuntime aspNetWorker, string virtualDir, string physicalDir, IDictionary<string, string> serverVariables) : this(aspNetWorker, virtualDir, physicalDir) {
+        public AspNetWorker(IAspNetRuntime aspNetWorker, string virtualDir, string physicalDir, IDictionary<string, string> serverVariables) : this(aspNetWorker, virtualDir, physicalDir) {
             _serverVariables = serverVariables;
         }
 
