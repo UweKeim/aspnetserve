@@ -58,11 +58,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AspNetRuntime.cs" />
-    <Compile Include="AspNetWorkerRequest.cs" />
+    <Compile Include="AspNetWorker.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DomainHook.cs" />
     <Compile Include="HttpResponseCode.cs" />
     <Compile Include="IAspNetRuntime.cs" />
-    <Compile Include="IAspNetWorkerRequest.cs" />
+    <Compile Include="IAspNetWorker.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="IRequest.cs" />
     <Compile Include="IResponse.cs" />
     <Compile Include="ITransaction.cs" />
