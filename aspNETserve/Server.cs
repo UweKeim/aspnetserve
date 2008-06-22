@@ -57,7 +57,7 @@ namespace aspNETserve {
             SetStatus(ServerStatus.Starting);
             try {
                 _host = _appManager.CreateObject(_appId, typeof(DomainHook), _virtualDir, _physicalDir, false) as DomainHook;
-                _host.Configure(typeof(AspNetWorkerRequest), new object[]{_virtualDir, _physicalDir, _serverVariables});
+                _host.Configure(_virtualDir, _physicalDir, _serverVariables);
                 _sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 _sock.Bind(new IPEndPoint(_endPoint, _port));
                 _sock.Listen(100);

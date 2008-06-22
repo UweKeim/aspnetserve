@@ -38,29 +38,13 @@ namespace aspNETserve.Core {
             HostingEnvironment.InitiateShutdown();
         }
 
-        public void Configure(IAspNetWorkerRequest httpWorker) {
-            if (IsConfigured)
-                throw new Exception("The DomainHook is already configured.");
-            if (httpWorker == null)
-                throw new ArgumentNullException("httpWorker", "IHttpWorker cannot be null.");
-            _worker = httpWorker;
-        }
-
-        public void Configure(Type t, params object[] args) {
+        public void Configure(string virtualDir, string physicalDir, IDictionary<string, string> serverVariables) {
             if(IsConfigured)
                 throw new Exception("The DomainHook is already configured.");
 
-            Type[] implementedInterfaces = t.GetInterfaces();
-            bool isIHttpWorker = false;
-            foreach (Type implementedInterface in implementedInterfaces) {
-                if (implementedInterface == typeof(IAspNetWorkerRequest))
-                    isIHttpWorker = true;
-            }
+            AspNetWorker aspNetEngine = new AspNetWorker();
 
-            if (!isIHttpWorker)
-                throw new Exception("Type does not implement IHttpWorker");
-
-            _worker = (IAspNetWorkerRequest)Activator.CreateInstance(t, args);
+            _worker = new AspNetWorkerRequest(aspNetEngine, virtualDir, physicalDir, serverVariables);
         }
 
         public void ProcessTransaction(ITransaction transaction) {
