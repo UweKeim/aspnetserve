@@ -57,15 +57,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AspNetWorker.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="AspNetRuntime.cs" />
     <Compile Include="AspNetWorkerRequest.cs" />
     <Compile Include="DomainHook.cs" />
     <Compile Include="HttpResponseCode.cs" />
-    <Compile Include="IAspNetWorker.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="IAspNetRuntime.cs" />
     <Compile Include="IAspNetWorkerRequest.cs" />
     <Compile Include="IRequest.cs" />
     <Compile Include="IResponse.cs" />
