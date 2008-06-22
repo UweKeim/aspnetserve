@@ -18,7 +18,7 @@ namespace UnitTests {
 
         [Test]
         [Description("Determines that the GetAppPath method of the AspNetWorker IAspNetWorker implementation returns the virtual path provided on the constructor.")]
-        public void GetAppPath_Test() {
+        public void GetAppPath_When_Virtual_Path_Is_Root_Test() {
             MockRepository mocks = new MockRepository();
             string virtualPath = @"/";
 
@@ -26,6 +26,30 @@ namespace UnitTests {
             AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, virtualPath, @"z:\temp");
 
             Assert.AreEqual(virtualPath, aspNetWorker.GetAppPath());
+        }
+
+        [Test]
+        [Description("Determines that the GetAppPath method of the AspNetWorker IAspNetWorker implementation returns the virtual path provided on the constructor.")]
+        public void GetAppPath_When_Virtual_Path_Is_Complex_Test() {
+            MockRepository mocks = new MockRepository();
+            string virtualPath = @"/foo";
+
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, virtualPath, @"z:\temp");
+
+            Assert.AreEqual(virtualPath, aspNetWorker.GetAppPath());
+        }
+
+        [Test]
+        [Description("Determines that the GetAppPathTranslated method returns the physical path as passed on AspNetWorker's constructor.")]
+        public void GetAppPathTranslated_Test() {
+            MockRepository mocks = new MockRepository();
+            string physicalPath = @"c:\temp";
+
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", physicalPath);
+
+            Assert.AreEqual(physicalPath, aspNetWorker.GetAppPathTranslated());
         }
     }
 }
