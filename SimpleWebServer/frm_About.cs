@@ -33,7 +33,7 @@ namespace SimpleWebServer {
         }
 
         private void lblaspNETserveHomepage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            System.Diagnostics.Process.Start("http://codeplex.com/aspNETserve/");
+            System.Diagnostics.Process.Start("http://code.google.com/p/aspnetserve/");
         }
     }
 }

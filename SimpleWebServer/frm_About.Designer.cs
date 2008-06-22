@@ -75,10 +75,10 @@ namespace SimpleWebServer {
             this.lblaspNETserveHomepage.AutoSize = true;
             this.lblaspNETserveHomepage.Location = new System.Drawing.Point(42, 59);
             this.lblaspNETserveHomepage.Name = "lblaspNETserveHomepage";
-            this.lblaspNETserveHomepage.Size = new System.Drawing.Size(174, 13);
+            this.lblaspNETserveHomepage.Size = new System.Drawing.Size(206, 13);
             this.lblaspNETserveHomepage.TabIndex = 5;
             this.lblaspNETserveHomepage.TabStop = true;
-            this.lblaspNETserveHomepage.Text = "http://codeplex.com/aspNETserve";
+            this.lblaspNETserveHomepage.Text = "http://code.google.com/p/aspNETserve/";
             this.lblaspNETserveHomepage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblaspNETserveHomepage_LinkClicked);
             // 
             // btnClose
