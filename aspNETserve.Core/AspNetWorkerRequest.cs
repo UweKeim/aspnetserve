@@ -15,14 +15,14 @@ using System.IO;
 namespace aspNETserve.Core {
     public sealed class AspNetWorkerRequest : HttpWorkerRequest, IAspNetWorkerRequest {
 
-        public AspNetWorkerRequest(IAspNetWorker aspNetWorker, string virtualDir, string physicalDir)  {
+        public AspNetWorkerRequest(IAspNetRuntime aspNetWorker, string virtualDir, string physicalDir)  {
             _physicalDir = physicalDir;
             _virtualDir = virtualDir;
             _aspNetWorker = aspNetWorker;
             _serverVariables = new Dictionary<string, string>();
         }
 
-        public AspNetWorkerRequest(IAspNetWorker aspNetWorker, string virtualDir, string physicalDir, IDictionary<string, string> serverVariables) : this(aspNetWorker, virtualDir, physicalDir) {
+        public AspNetWorkerRequest(IAspNetRuntime aspNetWorker, string virtualDir, string physicalDir, IDictionary<string, string> serverVariables) : this(aspNetWorker, virtualDir, physicalDir) {
             _serverVariables = serverVariables;
         }
 
@@ -406,6 +406,6 @@ namespace aspNETserve.Core {
         private string _virtualFilePath;
         private string _filePath;
         private string _pathInfo;
-        private IAspNetWorker _aspNetWorker;
+        private IAspNetRuntime _aspNetWorker;
     }
 }

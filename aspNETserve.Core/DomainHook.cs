@@ -42,9 +42,9 @@ namespace aspNETserve.Core {
             if(IsConfigured)
                 throw new Exception("The DomainHook is already configured.");
 
-            AspNetWorker aspNetEngine = new AspNetWorker();
+            AspNetRuntime aspNetRuntime = new AspNetRuntime();
 
-            _worker = new AspNetWorkerRequest(aspNetEngine, virtualDir, physicalDir, serverVariables);
+            _worker = new AspNetWorkerRequest(aspNetRuntime, virtualDir, physicalDir, serverVariables);
         }
 
         public void ProcessTransaction(ITransaction transaction) {

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace aspNETserve.Core {
-    public interface IAspNetWorker {
+    public interface IAspNetRuntime {
         void ProcessRequest(IAspNetWorkerRequest aspNetWorkerRequest);
     }
 }

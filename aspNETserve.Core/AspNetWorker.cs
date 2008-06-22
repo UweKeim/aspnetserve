@@ -11,7 +11,7 @@ using System.Text;
 using System.Web;
 
 namespace aspNETserve.Core {
-    public class AspNetWorker : IAspNetWorker {
+    public class AspNetRuntime : IAspNetRuntime {
 
         public void ProcessRequest(IAspNetWorkerRequest aspNetWorkerRequest) {
             //TODO: Find a way to prevent the IAspNetWorkerRequest implementation
