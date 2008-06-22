@@ -20,7 +20,7 @@ namespace aspNETserve.Core {
     /// AppDomain.
     /// </summary>
     public sealed class DomainHook : MarshalByRefObject, IRegisteredObject, IDisposable {
-        private IAspNetWorker _worker = null;
+        private IAspNetWorkerRequest _worker = null;
 
         public DomainHook() {
             HostingEnvironment.RegisterObject(this);
@@ -38,7 +38,7 @@ namespace aspNETserve.Core {
             HostingEnvironment.InitiateShutdown();
         }
 
-        public void Configure(IAspNetWorker httpWorker) {
+        public void Configure(IAspNetWorkerRequest httpWorker) {
             if (IsConfigured)
                 throw new Exception("The DomainHook is already configured.");
             if (httpWorker == null)
@@ -53,14 +53,14 @@ namespace aspNETserve.Core {
             Type[] implementedInterfaces = t.GetInterfaces();
             bool isIHttpWorker = false;
             foreach (Type implementedInterface in implementedInterfaces) {
-                if (implementedInterface == typeof(IAspNetWorker))
+                if (implementedInterface == typeof(IAspNetWorkerRequest))
                     isIHttpWorker = true;
             }
 
             if (!isIHttpWorker)
                 throw new Exception("Type does not implement IHttpWorker");
 
-            _worker = (IAspNetWorker)Activator.CreateInstance(t, args);
+            _worker = (IAspNetWorkerRequest)Activator.CreateInstance(t, args);
         }
 
         public void ProcessTransaction(ITransaction transaction) {
