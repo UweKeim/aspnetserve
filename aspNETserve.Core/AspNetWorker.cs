@@ -8,8 +8,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 
 namespace aspNETserve.Core {
     public class AspNetWorker : IAspNetWorker {
+
+        public void ProcessRequest(IAspNetWorkerRequest aspNetWorkerRequest) {
+            //TODO: Find a way to prevent the IAspNetWorkerRequest implementation
+            //from also having to be a HttpWorkerRequest. Perhaps some type of a 
+            //proxy object.
+            HttpRuntime.ProcessRequest((HttpWorkerRequest) aspNetWorkerRequest);
+        }
     }
 }

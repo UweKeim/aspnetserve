@@ -11,5 +11,6 @@ using System.Text;
 
 namespace aspNETserve.Core {
     public interface IAspNetWorker {
+        void ProcessRequest(IAspNetWorkerRequest aspNetWorkerRequest);
     }
 }
