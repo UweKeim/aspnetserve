@@ -20,6 +20,7 @@ namespace aspNETserve.Core {
             _virtualDir = virtualDir;
             _aspNetWorker = aspNetWorker;
             _serverVariables = new Dictionary<string, string>();
+            _appPoolId = AppDomain.CurrentDomain.Id.ToString();
         }
 
         public AspNetWorker(IAspNetRuntime aspNetWorker, string virtualDir, string physicalDir, IDictionary<string, string> serverVariables) : this(aspNetWorker, virtualDir, physicalDir) {
@@ -56,7 +57,7 @@ namespace aspNETserve.Core {
         }
 
         public override string GetAppPoolID() {
-            return AppDomain.CurrentDomain.FriendlyName;
+            return _appPoolId;
         }
 
         public override long GetBytesRead() {
@@ -407,5 +408,6 @@ namespace aspNETserve.Core {
         private string _filePath;
         private string _pathInfo;
         private IAspNetRuntime _aspNetWorker;
+        private readonly string _appPoolId;
     }
 }

@@ -51,5 +51,17 @@ namespace UnitTests {
 
             Assert.AreEqual(physicalPath, aspNetWorker.GetAppPathTranslated());
         }
+
+        [Test]
+        [Description("Determines that the GetAppPoolID method returns teh ID of the AppDomain that the worker process resides in.")]
+        public void GetAppPoolID_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            Assert.AreEqual(AppDomain.CurrentDomain.Id.ToString(), aspNetWorker.GetAppPoolID());
+            
+        }
     }
 }
