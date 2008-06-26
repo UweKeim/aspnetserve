@@ -151,7 +151,7 @@ namespace UnitTests {
         }
 
         [Test]
-        [Description("Determines that the GetFilePath correctly returns the file path for a folder request.")]
+        [Description("Determines that the GetFilePath correctly returns the file path for a page request.")]
         public void GetFilePath_For_Root_Page_Path_Test() {
             MockRepository mocks = new MockRepository();
             IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
@@ -197,7 +197,7 @@ namespace UnitTests {
         }
 
         [Test]
-        [Description("Determines that the GetFilePath correctly returns the file path for a folder request.")]
+        [Description("Determines that the GetFilePath correctly returns the file path for a page request.")]
         public void GetFilePath_For_Non_Root_Page_Path_Test() {
             MockRepository mocks = new MockRepository();
             IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
@@ -217,6 +217,98 @@ namespace UnitTests {
 
             aspNetWorker.ProcessTransaction(transaction);
             Assert.AreEqual("/test/Test.aspx", aspNetWorker.GetFilePath());
+        }
+
+        [Test]
+        [Description("Determines that the GetFilePathTranslated method returns the filename for a folder request.")]
+        public void GetFilePathTranslated_For_Folder_Path_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual(@"c:\temp\test", aspNetWorker.GetFilePathTranslated());
+        }
+
+        [Test]
+        [Description("Determines that the GetFilePathTranslated method returns the filename for a folder request.")]
+        public void GetFilePathTranslated_For_Page_Path_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/test/Page.aspx").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual(@"c:\temp\test\Page.aspx", aspNetWorker.GetFilePathTranslated());
+        }
+
+        [Test]
+        [Description("Determines that the GetFilePathTranslated method returns the filename for a folder request.")]
+        public void GetFilePathTranslated_For_Root_Folder_Path_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual(@"c:\temp", aspNetWorker.GetFilePathTranslated());
+        }
+
+        [Test]
+        [Description("Determines that the GetFilePathTranslated method returns the filename for a folder request.")]
+        public void GetFilePathTranslated_For_Root_Page_Path_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/Page.aspx").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual(@"c:\temp\Page.aspx", aspNetWorker.GetFilePathTranslated());
         }
     }
 }
