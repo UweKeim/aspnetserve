@@ -183,7 +183,7 @@ namespace UnitTests {
             IRequest request = mocks.CreateMock<IRequest>();
 
             using (mocks.Unordered()) {
-                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/foo/test/").Repeat.Any();
                 Expect.Call(transaction.Request).Return(request).Repeat.Any();
                 Expect.Call(transaction.Response).Return(response).Repeat.Any();
                 Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
@@ -193,7 +193,7 @@ namespace UnitTests {
             AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
 
             aspNetWorker.ProcessTransaction(transaction);
-            Assert.AreEqual("/test/", aspNetWorker.GetFilePath());
+            Assert.AreEqual("/foo/test/", aspNetWorker.GetFilePath());
         }
 
         [Test]
@@ -206,7 +206,7 @@ namespace UnitTests {
             IRequest request = mocks.CreateMock<IRequest>();
 
             using (mocks.Unordered()) {
-                Expect.Call(request.RawUrl).Return("/test/Test.aspx").Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/foo/test/Test.aspx").Repeat.Any();
                 Expect.Call(transaction.Request).Return(request).Repeat.Any();
                 Expect.Call(transaction.Response).Return(response).Repeat.Any();
                 Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
@@ -216,7 +216,7 @@ namespace UnitTests {
             AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
 
             aspNetWorker.ProcessTransaction(transaction);
-            Assert.AreEqual("/test/Test.aspx", aspNetWorker.GetFilePath());
+            Assert.AreEqual("/foo/test/Test.aspx", aspNetWorker.GetFilePath());
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace UnitTests {
         }
 
         [Test]
-        [Description("Determines that the GetFilePathTranslated method returns the filename for a folder request.")]
+        [Description("Determines that the GetFilePathTranslated method returns the filename for a page request.")]
         public void GetFilePathTranslated_For_Page_Path_Test() {
             MockRepository mocks = new MockRepository();
             IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
@@ -289,7 +289,7 @@ namespace UnitTests {
         }
 
         [Test]
-        [Description("Determines that the GetFilePathTranslated method returns the filename for a folder request.")]
+        [Description("Determines that the GetFilePathTranslated method returns the filename for a page request.")]
         public void GetFilePathTranslated_For_Root_Page_Path_Test() {
             MockRepository mocks = new MockRepository();
             IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
