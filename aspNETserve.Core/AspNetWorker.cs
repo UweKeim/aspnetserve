@@ -111,9 +111,7 @@ namespace aspNETserve.Core {
         }
 
         public override string GetProtocol() {
-            if(IsSecure())
-                return "HTTPS";
-            return "HTTP";
+            return IsSecure() ? "HTTPS" : "HTTP";
         }
 
         public override string GetQueryString() {
