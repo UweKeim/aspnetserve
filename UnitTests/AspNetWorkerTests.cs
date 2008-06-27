@@ -406,5 +406,29 @@ namespace UnitTests {
             aspNetWorker.ProcessTransaction(transaction);
             Assert.AreEqual("DELETE", aspNetWorker.GetHttpVerbName());
         }
+
+        [Test]
+        [Description("Determines that the GetHttpVersion simply delegates to the request object")]
+        public void GetHttpVersion_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(request.HttpVersion).Return("HTTP/1.1").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("HTTP/1.1", aspNetWorker.GetHttpVersion());
+        }
     }
 }
