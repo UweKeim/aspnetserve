@@ -310,5 +310,101 @@ namespace UnitTests {
             aspNetWorker.ProcessTransaction(transaction);
             Assert.AreEqual(@"c:\temp\Page.aspx", aspNetWorker.GetFilePathTranslated());
         }
+
+        [Test]
+        [Description("Determines that the GetHttpVerbName is correct when the HttpMethod is GET")]
+        public void GetHttpVerbName_When_Is_Get_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(request.HttpMethod).Return("GET").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("GET", aspNetWorker.GetHttpVerbName());
+        }
+
+        [Test]
+        [Description("Determines that the GetHttpVerbName is correct when the HttpMethod is POST")]
+        public void GetHttpVerbName_When_Is_Post_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(request.HttpMethod).Return("POST").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("POST", aspNetWorker.GetHttpVerbName());
+        }
+
+        [Test]
+        [Description("Determines that the GetHttpVerbName is correct when the HttpMethod is PUT")]
+        public void GetHttpVerbName_When_Is_Put_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(request.HttpMethod).Return("PUT").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("PUT", aspNetWorker.GetHttpVerbName());
+        }
+
+        [Test]
+        [Description("Determines that the GetHttpVerbName is correct when the HttpMethod is DELETE")]
+        public void GetHttpVerbName_When_Is_Delete_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(request.HttpMethod).Return("DELETE").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("DELETE", aspNetWorker.GetHttpVerbName());
+        }
     }
 }
