@@ -87,7 +87,7 @@ namespace aspNETserve.Core {
         }
 
         public override string GetHttpVersion() {
-            return "HTTP/1.1";
+            return _request.HttpVersion;
         }
 
         public override string GetKnownRequestHeader(int index) {

@@ -24,6 +24,7 @@ namespace aspNETserve.Core {
         System.Net.IPEndPoint LocalEndPoint { get; }
         System.Net.IPEndPoint RemoteEndPoint { get; }
         Guid RequestId { get; }
+        string HttpVersion { get; }
         /// <summary>
         /// Determines if the client connection is suppose to be kept alive or closed
         /// after the request is processed.

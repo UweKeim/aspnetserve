@@ -114,6 +114,12 @@ namespace aspNETserve {
             get { return Request.GetKnownRequestHeader(HttpWorkerRequest.HeaderConnection).ToLower() == "keep-alive"; }
         }
 
+        string IRequest.HttpVersion {
+            get { 
+                return "HTTP/1.1"; //TODO This is hardcoded for now 
+            }
+        }
+
         #endregion
 
         #region IResponse Members
