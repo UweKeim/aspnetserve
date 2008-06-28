@@ -553,5 +553,55 @@ namespace UnitTests {
             aspNetWorker.ProcessTransaction(transaction);
             Assert.AreEqual("/ATail", aspNetWorker.GetPathInfo());
         }
+
+        [Test]
+        [Description("Determines that the GetPreLoadedEntityBody returns the posted data")]
+        public void GetPreloadedEntityBody_When_No_Data_Loaded_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+            byte[] postData = new byte[] { };
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.PostData).Return(postData).Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual(postData, aspNetWorker.GetPreloadedEntityBody());
+        }
+
+        [Test]
+        [Description("Determines that the GetPreLoadedEntityBody returns the posted data")]
+        public void GetPreloadedEntityBody_When_Data_Is_Loaded_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+            byte[] postData = new byte[] { 12, 56, 32, 98, 46 };
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.PostData).Return(postData).Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual(postData, aspNetWorker.GetPreloadedEntityBody());
+        }
     }
 }

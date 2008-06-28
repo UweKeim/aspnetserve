@@ -77,5 +77,9 @@ namespace aspNETserve.Core {
         /// Gets the "tail" portion of the request URI.
         /// </summary>
         string GetPathInfo();
+        /// <summary>
+        /// Gets the portion of bytes posted that has been loaded so far.
+        /// </summary>
+        byte[] GetPreloadedEntityBody();
     }
 }
