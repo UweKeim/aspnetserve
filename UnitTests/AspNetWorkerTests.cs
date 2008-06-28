@@ -7,6 +7,7 @@
  ************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using aspNETserve.Core;
 using NUnit.Framework;
@@ -455,6 +456,102 @@ namespace UnitTests {
 
             aspNetWorker.ProcessTransaction(transaction);
             Assert.AreEqual(expectedValue, aspNetWorker.GetKnownRequestHeader(index));
+        }
+
+        [Test]
+        [Description("Determines that the GetLocalAddress method simply delegates to the request object.")]
+        public void GetLocalAddress_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+            IPEndPoint ipEndPoint = new IPEndPoint(new IPAddress(new byte[]{47, 94, 23, 12}), 1238);
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(request.LocalEndPoint).Return(ipEndPoint).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual(ipEndPoint.Address.ToString(), aspNetWorker.GetLocalAddress());
+        }
+
+        [Test]
+        [Description("Determines that the GetLocalPort method simply delegates to the request object.")]
+        public void GetLocalPort_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+            IPEndPoint ipEndPoint = new IPEndPoint(new IPAddress(new byte[] { 47, 94, 23, 12 }), 1238);
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(request.LocalEndPoint).Return(ipEndPoint).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual(ipEndPoint.Port, aspNetWorker.GetLocalPort());
+        }
+
+        [Test]
+        [Description("Ensures that the GetPathInfo method returns the empty string when URI contains no tail")]
+        public void GetPathInfo_With_No_Tail_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("", aspNetWorker.GetPathInfo());
+        }
+
+        [Test]
+        [Description("Ensures that the GetPathInfo method returns the empty string when URI contains no tail")]
+        public void GetPathInfo_With_Tail_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/Page.aspx/ATail").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("/ATail", aspNetWorker.GetPathInfo());
         }
     }
 }

@@ -63,5 +63,19 @@ namespace aspNETserve.Core {
         /// </summary>
         /// <returns></returns>
         string GetKnownRequestHeader(int index);
+        /// <summary>
+        /// Gets the network address that the current request was answered on. This is a address
+        /// corresponding to the local server.
+        /// </summary>
+        string GetLocalAddress();
+        /// <summary>
+        /// Gets the port number that the current request was answered on. This is a port
+        /// number belonging to the local server.
+        /// </summary>
+        int GetLocalPort();
+        /// <summary>
+        /// Gets the "tail" portion of the request URI.
+        /// </summary>
+        string GetPathInfo();
     }
 }
