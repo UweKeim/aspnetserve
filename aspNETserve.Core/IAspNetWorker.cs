@@ -58,5 +58,10 @@ namespace aspNETserve.Core {
         /// Gets the version of the HTTP protocol used for communications with the client.
         /// </summary>
         string GetHttpVersion();
+        /// <summary>
+        /// Returns a known Http header by its index as refered to by HttpWorkerRequest
+        /// </summary>
+        /// <returns></returns>
+        string GetKnownRequestHeader(int index);
     }
 }

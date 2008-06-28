@@ -430,5 +430,31 @@ namespace UnitTests {
             aspNetWorker.ProcessTransaction(transaction);
             Assert.AreEqual("HTTP/1.1", aspNetWorker.GetHttpVersion());
         }
+
+        [Test]
+        [Description("Determines that the GetKnownRequestHeader method simply delegates to the request object.")]
+        public void GetKnownRequestHeader_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+            string expectedValue = (new Guid()).ToString();
+            int index = (new Random()).Next();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/foo/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(request.GetKnownRequestHeader(index)).Return(expectedValue).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/foo", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual(expectedValue, aspNetWorker.GetKnownRequestHeader(index));
+        }
     }
 }
