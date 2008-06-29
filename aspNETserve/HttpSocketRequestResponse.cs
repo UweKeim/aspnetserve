@@ -487,7 +487,13 @@ namespace aspNETserve {
         }
 
         protected bool IsSecure() {
-            return false;
+            /*
+             * This method assumes that the connection is secure if it
+             * was received on port 443 (HTTPS port).
+             * This feels "wrong", but at the same time I can't think
+             * of a better way yet.
+             */ 
+            return _localEndPoint.Port == 443;
         }
     }
 }
