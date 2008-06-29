@@ -120,6 +120,12 @@ namespace aspNETserve {
             }
         }
 
+        bool IRequest.IsSecure {
+            get {
+                return false; //TODO find a way to implemented this
+            }
+        }
+
         #endregion
 
         #region IResponse Members
@@ -171,6 +177,12 @@ namespace aspNETserve {
 
         void IResponse.SendUnknownResponseHeader(string name, string value) {
             _unknownResponseHeaders[name] = value;
+        }
+
+        bool IResponse.IsSecure {
+            get {
+                return false; //TODO find a way to implemented this
+            }
         }
 
         #endregion

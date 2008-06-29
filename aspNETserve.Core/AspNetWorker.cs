@@ -190,7 +190,7 @@ namespace aspNETserve.Core {
         }
 
         public override bool IsSecure() {
-            return IsSecure(_request.LocalEndPoint);
+            return _request.IsSecure && _response.IsSecure;
         }
 
         public override string MachineConfigPath {
@@ -324,9 +324,6 @@ namespace aspNETserve.Core {
         
         #endregion
     //-------------------------
-        private bool IsSecure(System.Net.EndPoint endPoint) {
-            return false;   //<<HACK
-        }
 
         private bool IsRestricted(string fileName) {
             bool restricted = false;

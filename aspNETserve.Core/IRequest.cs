@@ -30,5 +30,9 @@ namespace aspNETserve.Core {
         /// after the request is processed.
         /// </summary>
         bool IsKeepAlive { get; }
+        /// <summary>
+        /// Determines if the request was sent over a secure channel.
+        /// </summary>
+        bool IsSecure { get; }
     }
 }

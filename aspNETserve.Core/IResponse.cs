@@ -20,5 +20,9 @@ namespace aspNETserve.Core {
         byte[] ToHttpResponse();
         void SendKnownResponseHeader(int index, string value);
         void SendUnknownResponseHeader(string name, string value);
+        /// <summary>
+        /// Determines if the response will be transmitted over a secure channel
+        /// </summary>
+        bool IsSecure { get; }
     }
 }
