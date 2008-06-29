@@ -122,7 +122,7 @@ namespace aspNETserve {
 
         bool IRequest.IsSecure {
             get {
-                return false; //TODO find a way to implemented this
+                return IsSecure();
             }
         }
 
@@ -181,7 +181,7 @@ namespace aspNETserve {
 
         bool IResponse.IsSecure {
             get {
-                return false; //TODO find a way to implemented this
+                return IsSecure();
             }
         }
 
@@ -484,6 +484,10 @@ namespace aspNETserve {
                     return "Maximum";
             }
             return null;
+        }
+
+        protected bool IsSecure() {
+            return false;
         }
     }
 }
