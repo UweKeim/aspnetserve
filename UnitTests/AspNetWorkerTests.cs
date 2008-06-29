@@ -603,5 +603,105 @@ namespace UnitTests {
             aspNetWorker.ProcessTransaction(transaction);
             Assert.AreEqual(postData, aspNetWorker.GetPreloadedEntityBody());
         }
+
+        [Test]
+        [Description("Determines that the GetProtocol method returns HTTPS when both Request and Response are secure")]
+        public void GetProtocol_When_Request_And_Response_Are_Both_Secure_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(response.IsSecure).Return(true).Repeat.Any();
+                Expect.Call(request.IsSecure).Return(true).Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("HTTPS", aspNetWorker.GetProtocol());
+        }
+
+        [Test]
+        [Description("Determines that the GetProtocol method returns HTTPS when both Request and Response are not secure")]
+        public void GetProtocol_When_Request_And_Response_Are_Both_Not_Secure_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(response.IsSecure).Return(false).Repeat.Any();
+                Expect.Call(request.IsSecure).Return(false).Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("HTTP", aspNetWorker.GetProtocol());
+        }
+
+        [Test]
+        [Description("Determines that the GetProtocol method returns HTTPS when both Request is secure and Response is not secure")]
+        public void GetProtocol_When_Request_Is_Secure_And_Response_Is_Not_Secure_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(response.IsSecure).Return(false).Repeat.Any();
+                Expect.Call(request.IsSecure).Return(true).Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("HTTP", aspNetWorker.GetProtocol());
+        }
+
+        [Test]
+        [Description("Determines that the GetProtocol method returns HTTPS when both Request is not secure and Response is secure")]
+        public void GetProtocol_When_Request_Is_Not_Secure_And_Response_Is_Secure_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(response.IsSecure).Return(false).Repeat.Any();
+                Expect.Call(request.IsSecure).Return(true).Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.AreEqual("HTTP", aspNetWorker.GetProtocol());
+        }
     }
 }

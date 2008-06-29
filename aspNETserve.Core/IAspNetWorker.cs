@@ -81,5 +81,9 @@ namespace aspNETserve.Core {
         /// Gets the portion of bytes posted that has been loaded so far.
         /// </summary>
         byte[] GetPreloadedEntityBody();
+        /// <summary>
+        /// If the request and response are secure the protocol is HTTPS, otherwise HTTP.
+        /// </summary>
+        string GetProtocol();
     }
 }
