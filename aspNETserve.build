@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project name="aspNETserve" default="build" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+  <property name="nant.settings.currentframework" value="net-3.5" />
+  
+  <target name="build">
+    <msbuild project="aspNETserve.sln">
+      <property name="Configuration" value="Debug"/>
+      <property name="Platform" value="Any CPU" />
+    </msbuild>
+  </target>
+</project>
