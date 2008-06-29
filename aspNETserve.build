@@ -16,4 +16,10 @@
       <arg value="./aspNETserve.Core/bin/Debug/aspNETserve.Core.dll" />
     </exec>
   </target>
+
+  <target name="UnitTest" depends="build">
+    <exec program="./References/NUnit 2.4.3/bin/nunit-console.exe">
+      <arg value="./UnitTests/bin/Debug/UnitTests.dll" />
+    </exec>
+  </target>
 </project>
