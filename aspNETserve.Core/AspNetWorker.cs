@@ -114,6 +114,14 @@ namespace aspNETserve.Core {
             return IsSecure() ? "HTTPS" : "HTTP";
         }
 
+        public override bool HeadersSent() {
+            return _response.HeadersSent;
+        }
+
+        public override void FlushResponse(bool finalFlush) {
+            _response.Flush();
+        }
+
         public override string GetQueryString() {
             return GetQueryString(_request.RawUrl);
         }
@@ -257,14 +265,6 @@ namespace aspNETserve.Core {
 
         public override void SendUnknownResponseHeader(string name, string value) {
             _response.SendUnknownResponseHeader(name, value);
-        }
-
-        public override bool HeadersSent() {
-            return _response.HeadersSent;
-        }
-
-        public override void FlushResponse(bool finalFlush) {
-            _response.Flush();
         }
 
         #region I DONT KNOW
