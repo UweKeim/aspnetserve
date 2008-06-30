@@ -703,5 +703,101 @@ namespace UnitTests {
             aspNetWorker.ProcessTransaction(transaction);
             Assert.AreEqual("HTTP", aspNetWorker.GetProtocol());
         }
+
+        [Test]
+        [Description("Determines that the HeadersSent method returns true when the response has sent headers.")]
+        public void HeadersSent_Is_True_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(response.HeadersSent).Return(true).Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.IsTrue(aspNetWorker.HeadersSent());
+        }
+
+        [Test]
+        [Description("Determines that the HeadersSent method returns false when the response has not sent headers.")]
+        public void HeadersSent_Is_False_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(response.HeadersSent).Return(false).Repeat.Any();
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            Assert.IsFalse(aspNetWorker.HeadersSent());
+        }
+
+        [Test]
+        [Description("Determiens that the FlushResponse method calls the Flush method of the Response object even when the parameter is false")]
+        public void FlushResponse_Is_Not_Final_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+                Expect.Call(delegate { response.Flush(); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            aspNetWorker.FlushResponse(false);
+        }
+
+        [Test]
+        [Description("Determiens that the FlushResponse method calls the Flush method of the Response object even when the parameter is true")]
+        public void FlushResponse_Is_Final_Test() {
+            MockRepository mocks = new MockRepository();
+            IAspNetRuntime aspNetRuntime = mocks.CreateMock<IAspNetRuntime>();
+            ITransaction transaction = mocks.CreateMock<ITransaction>();
+            IResponse response = mocks.CreateMock<IResponse>();
+            IRequest request = mocks.CreateMock<IRequest>();
+
+            using (mocks.Unordered()) {
+                Expect.Call(request.RawUrl).Return("/test/").Repeat.Any();
+                Expect.Call(transaction.Request).Return(request).Repeat.Any();
+                Expect.Call(transaction.Response).Return(response).Repeat.Any();
+                Expect.Call(delegate { aspNetRuntime.ProcessRequest(null); }).IgnoreArguments();
+                Expect.Call(delegate { response.Flush(); }).IgnoreArguments();
+            }
+            mocks.ReplayAll();
+
+            AspNetWorker aspNetWorker = new AspNetWorker(aspNetRuntime, "/", @"c:\temp");
+
+            aspNetWorker.ProcessTransaction(transaction);
+            aspNetWorker.FlushResponse(true);
+        }
     }
 }

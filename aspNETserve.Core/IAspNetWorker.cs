@@ -85,5 +85,13 @@ namespace aspNETserve.Core {
         /// If the request and response are secure the protocol is HTTPS, otherwise HTTP.
         /// </summary>
         string GetProtocol();
+        /// <summary>
+        /// Determines if the HTTP headers have been sent to the client yet or not.
+        /// </summary>
+        bool HeadersSent();
+        /// <summary>
+        /// Sends any unsent content to the client.
+        /// </summary>
+        void FlushResponse(bool finalFlush);
     }
 }
