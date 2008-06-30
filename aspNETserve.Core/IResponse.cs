@@ -17,12 +17,19 @@ namespace aspNETserve.Core {
         string StatusDescription { get; set; }
         byte[] RawData { get; set; }
         string MimeType { get; set; }
-        byte[] ToHttpResponse();
         void SendKnownResponseHeader(int index, string value);
         void SendUnknownResponseHeader(string name, string value);
         /// <summary>
         /// Determines if the response will be transmitted over a secure channel
         /// </summary>
         bool IsSecure { get; }
+        /// <summary>
+        /// Sends any unset content to the client.
+        /// </summary>
+        void Flush();
+        /// <summary>
+        /// Determines if the HTTP headers have been sent to the client
+        /// </summary>
+        bool HeadersSent { get; }
     }
 }

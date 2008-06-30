@@ -259,14 +259,19 @@ namespace aspNETserve.Core {
             _response.SendUnknownResponseHeader(name, value);
         }
 
+        public override bool HeadersSent() {
+            return _response.HeadersSent;
+        }
+
+        public override void FlushResponse(bool finalFlush) {
+            _response.Flush();
+        }
+
         #region I DONT KNOW
         public override void CloseConnection() {
             //???
         }
         public override void EndOfRequest() {
-            //???
-        }
-        public override void FlushResponse(bool finalFlush) {
             //???
         }
         public override byte[] GetClientCertificate() {
@@ -301,9 +306,6 @@ namespace aspNETserve.Core {
         }
         public override IntPtr GetVirtualPathToken() {
             return base.GetVirtualPathToken();
-        }
-        public override bool HeadersSent() {
-            return base.HeadersSent();
         }
         public override bool IsEntireEntityBodyIsPreloaded() {
             return base.IsEntireEntityBodyIsPreloaded();

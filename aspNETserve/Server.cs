@@ -132,8 +132,7 @@ namespace aspNETserve {
 
                 HttpSocketRequestResponse transaction = new HttpSocketRequestResponse(com);
                 _host.ProcessTransaction(transaction);
-                byte[] rawResponse = transaction.Response.ToHttpResponse();
-                com.Send(rawResponse);
+                transaction.Response.Flush();
                 com.Close();    //this breaks "Connection: Keep-Alive" requests.
 
             } catch {

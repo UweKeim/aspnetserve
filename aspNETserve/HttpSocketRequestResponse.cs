@@ -38,7 +38,7 @@ namespace aspNETserve {
         private string _mimeType = "text/html";
         private string[] _knownResponseHeaders;
         private Hashtable _unknownResponseHeaders;
-        private List<byte> _response;
+        private bool _headersSent = false;
 
         public HttpSocketRequestResponse(Socket socket) {
             if (socket == null)
@@ -150,27 +150,6 @@ namespace aspNETserve {
             set { _mimeType = value; }
         }
 
-        byte[] IResponse.ToHttpResponse() {
-            _response = new List<byte>();
-            WriteLine("HTTP/1.1 " + _statusCode + " " + _statusDescription);
-            for (int i = 0; i != _knownResponseHeaders.Length; i++) {
-                string data = _knownResponseHeaders[i];
-                if (!string.IsNullOrEmpty(data)) {
-                    string header = GetHttpHeaderName(i);
-                    if (header != null) {
-                        WriteLine(string.Format("{0}: {1}", header, data));
-                    }
-                }
-            }
-            foreach (string unknownHeader in _unknownResponseHeaders.Keys) {
-                WriteLine(unknownHeader + ": " + _unknownResponseHeaders[unknownHeader]);
-            }
-            WriteLine("");
-            if (_rawData != null)
-                _response.AddRange(_rawData);
-            return _response.ToArray();
-        }
-
         void IResponse.SendKnownResponseHeader(int index, string value) {
             _knownResponseHeaders[index] = value;
         }
@@ -183,6 +162,15 @@ namespace aspNETserve {
             get {
                 return IsSecure();
             }
+        }
+
+        void IResponse.Flush() {
+            byte[] rawResponse = ToHttpResponse();
+            _socket.Send(rawResponse);
+        }
+
+        bool IResponse.HeadersSent {
+            get { return _headersSent; }
         }
 
         #endregion
@@ -426,8 +414,8 @@ namespace aspNETserve {
             return true;
         }
 
-        protected void WriteLine(string data) {
-            _response.AddRange(Encoding.ASCII.GetBytes(data + "\r\n"));
+        protected void WriteLine(string data, List<byte> response) {
+            response.AddRange(Encoding.ASCII.GetBytes(data + "\r\n"));
         }
 
         protected string GetHttpHeaderName(int index) {
@@ -494,6 +482,32 @@ namespace aspNETserve {
              * of a better way yet.
              */ 
             return _localEndPoint.Port == 443;
+        }
+
+        protected byte[] ToHttpResponse() {
+            List<byte> response = new List<byte>();
+            if (!_headersSent) {
+                WriteLine("HTTP/1.1 " + _statusCode + " " + _statusDescription, response);
+                for (int i = 0; i != _knownResponseHeaders.Length; i++) {
+                    string data = _knownResponseHeaders[i];
+                    if (!string.IsNullOrEmpty(data)) {
+                        string header = GetHttpHeaderName(i);
+                        if (header != null) {
+                            WriteLine(string.Format("{0}: {1}", header, data), response);
+                        }
+                    }
+                }
+                foreach (string unknownHeader in _unknownResponseHeaders.Keys) {
+                    WriteLine(unknownHeader + ": " + _unknownResponseHeaders[unknownHeader], response);
+                }
+                WriteLine("", response);
+                _headersSent = true;
+            }
+            if (_rawData != null) {
+                response.AddRange(_rawData);
+                _rawData = null;
+            }
+            return response.ToArray();
         }
     }
 }
