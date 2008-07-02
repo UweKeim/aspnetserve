@@ -177,7 +177,7 @@ namespace aspNETserve {
 
                     HttpSocketRequestResponse transaction = null;
                     do {
-                        transaction = new HttpSocketRequestResponse(com, transaction == null ? _initialRequestTimeout : _keepAliveRequestTimeout);  //wait 30s for the first attempt, and 30 min for subsequent "keep alive" attempts
+                        transaction = new HttpSocketRequestResponse(com, transaction == null ? _initialRequestTimeout : _keepAliveRequestTimeout);  //the initial request and subsequent requests may have different timeouts
                         _host.ProcessTransaction(transaction);
                         transaction.Response.Flush();
                     } while (transaction.Request.IsKeepAlive);  //loop while the client wants to "keep alive".
