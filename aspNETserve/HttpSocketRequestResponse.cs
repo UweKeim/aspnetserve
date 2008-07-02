@@ -192,25 +192,30 @@ namespace aspNETserve {
             List<byte> rawDataBuffer = new List<byte>();
             int count;
             byte[] buffer = new byte[1024];
-            bool elel = false;
-            while (!elel) {
+
+            bool headerReceived = false;
+            while (!headerReceived) {
                 com.Poll(100000, SelectMode.SelectRead); //wait up to 100ms for data
                 try {
                     count = com.Receive(buffer, 1024, SocketFlags.None);
                 } catch (SocketException) {
+                    //we should probably throw something more meaningful here
                     throw;  //oops!
                 }
                 if (count != 0) {
-                    for (int i = 0; i != count; i++)
+                    for (int i = 0; i != count; i++) {
                         rawDataBuffer.Add(buffer[i]);
-                    //Buffer.BlockCopy(buffer, 0, rawDataBuffer, rawDataBuffer.Count, count);
-                    if (rawDataBuffer.Count > 4) {
-                        int len = rawDataBuffer.Count;
-                        //13, 10, 13, 10 = "\r\n\r\n"
-                        elel = rawDataBuffer[len - 1] == (byte)10 &&
-                                rawDataBuffer[len - 2] == (byte)13 &&
-                                rawDataBuffer[len - 3] == (byte)10 &&
-                                rawDataBuffer[len - 4] == (byte)13;
+                        //as we are copying the newly received data into our rawDataBuffer check to see if 
+                        //we've encountered a \r\n\r\n (i.e. the end of headers)
+                        if (!headerReceived && rawDataBuffer.Count > 4) { //if we haven't already hit the end of the header, and have enough data...
+                            int len = rawDataBuffer.Count;
+                            //the check the last four positions for...
+                            //13, 10, 13, 10 = "\r\n\r\n"
+                            headerReceived = rawDataBuffer[len - 1] == (byte)10 &&
+                                    rawDataBuffer[len - 2] == (byte)13 &&
+                                    rawDataBuffer[len - 3] == (byte)10 &&
+                                    rawDataBuffer[len - 4] == (byte)13;
+                        }
                     }
                 }
             }
