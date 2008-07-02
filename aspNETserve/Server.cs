@@ -33,7 +33,7 @@ namespace aspNETserve {
         private IDictionary<string, string> _serverVariables;
         private ServerStatus _status = ServerStatus.Stopped;
         private int _openConnections;
-        private int _macConnections = 200;
+        private int _maxConnections = 200;
         private int _initialRequestTimeout = 30000;
         private int _keepAliveRequestTimeout = 30000;
 
@@ -151,7 +151,7 @@ namespace aspNETserve {
                 com = _sock.EndAccept(async);
                 _sock.BeginAccept(new AsyncCallback(ProcessRequest), _sock);
 
-                if (_openConnections < _macConnections) {   //if the number of open connections is "safe", then continue...
+                if (_openConnections < _maxConnections) {   //if the number of open connections is "safe", then continue...
 
                     HttpSocketRequestResponse transaction = null;
                     do {
