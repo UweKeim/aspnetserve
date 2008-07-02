@@ -136,11 +136,11 @@ namespace aspNETserve {
                 if (_openConnections < _macConnections) {   //if the number of open connections is "safe", then continue...
 
                     HttpSocketRequestResponse transaction = null;
-                    //do {
+                    do {
                         transaction = new HttpSocketRequestResponse(com, transaction == null ? _initialRequestTimeout : _keepAliveRequestTimeout);  //wait 30s for the first attempt, and 30 min for subsequent "keep alive" attempts
                         _host.ProcessTransaction(transaction);
                         transaction.Response.Flush();
-                    //} while (transaction.Request.IsKeepAlive);  //loop while the client wants to "keep alive".
+                    } while (transaction.Request.IsKeepAlive);  //loop while the client wants to "keep alive".
 
                 }   //otherwise we want to fall through and close this socket, and decrement the connection count.
                 com.Close();
