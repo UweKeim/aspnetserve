@@ -98,6 +98,24 @@ namespace aspNETserve {
                 Stop();
         }
 
+        /// <summary>
+        /// Gets or Sets the timeout period in ms for initial requests.
+        /// </summary>
+        public virtual int InitialRequestTimeout {
+            get { return _initialRequestTimeout; }
+            set { _initialRequestTimeout = value; }
+        }
+
+        /// <summary>
+        /// Gets or Sets the timeout period in ms for keep alive requests.
+        /// This is the maximum time the server will wait to between receiving chuncks
+        /// of data in a single request following a clients initial request.
+        /// </summary>
+        public virtual int KeepAliveRequestTimeout {
+            get { return _keepAliveRequestTimeout; }
+            set { _keepAliveRequestTimeout = value; }
+        }
+
         protected virtual void PrepareServerVariables() {
             _serverVariables = new Dictionary<string, string>();
             _serverVariables.Add("SERVER_SOFTWARE", "aspNETserve/" + Version());
