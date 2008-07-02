@@ -32,6 +32,10 @@ namespace aspNETserve {
         private ApplicationManager _appManager;
         private IDictionary<string, string> _serverVariables;
         private ServerStatus _status = ServerStatus.Stopped;
+        private int _openConnections;
+        private int _macConnections = 200;
+        private int _initialRequestTimeout = 30000;
+        private int _keepAliveRequestTimeout = 30000;
 
         protected Server() { }
 
@@ -54,6 +58,7 @@ namespace aspNETserve {
              */ 
             if (_sock != null) 
                 return;
+            _openConnections = 0;
             SetStatus(ServerStatus.Starting);
             try {
                 _host = _appManager.CreateObject(_appId, typeof(DomainHook), _virtualDir, _physicalDir, false) as DomainHook;
@@ -123,17 +128,22 @@ namespace aspNETserve {
         /// <param name="async">The IAsyncResult used to aquire to Socket.</param>
         protected virtual void ProcessRequest(IAsyncResult async) {
             Socket com = null;
+            Interlocked.Increment(ref _openConnections);
             try {
                 com = _sock.EndAccept(async);
-
-
                 _sock.BeginAccept(new AsyncCallback(ProcessRequest), _sock);
-                EndPoint remoteIp = com.RemoteEndPoint;
 
-                HttpSocketRequestResponse transaction = new HttpSocketRequestResponse(com);
-                _host.ProcessTransaction(transaction);
-                transaction.Response.Flush();
-                com.Close();    //this breaks "Connection: Keep-Alive" requests.
+                if (_openConnections < _macConnections) {   //if the number of open connections is "safe", then continue...
+
+                    HttpSocketRequestResponse transaction = null;
+                    //do {
+                        transaction = new HttpSocketRequestResponse(com, transaction == null ? _initialRequestTimeout : _keepAliveRequestTimeout);  //wait 30s for the first attempt, and 30 min for subsequent "keep alive" attempts
+                        _host.ProcessTransaction(transaction);
+                        transaction.Response.Flush();
+                    //} while (transaction.Request.IsKeepAlive);  //loop while the client wants to "keep alive".
+
+                }   //otherwise we want to fall through and close this socket, and decrement the connection count.
+                com.Close();
 
             } catch {
                 if (com != null) {
@@ -141,6 +151,8 @@ namespace aspNETserve {
                         com.Close();
                     } catch { }
                 }
+            } finally {
+                Interlocked.Decrement(ref _openConnections);
             }
         }
 

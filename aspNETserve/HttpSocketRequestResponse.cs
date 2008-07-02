@@ -40,7 +40,11 @@ namespace aspNETserve {
         private Hashtable _unknownResponseHeaders;
         private bool _headersSent = false;
 
-        public HttpSocketRequestResponse(Socket socket) {
+        /// <summary>
+        /// Creates an instance of HttpSocketRequestResponse from the supplied Socket.
+        /// </summary>
+        /// <param name="timeout">The timeout in milliseconds to wait for data.</param>
+        public HttpSocketRequestResponse(Socket socket, int timeout) {
             if (socket == null)
                 throw new ArgumentNullException("socket", "Socket cannot be null.");
 
@@ -55,8 +59,13 @@ namespace aspNETserve {
                 _knownResponseHeaders[i] = "";
             _socket = socket;
 
-            ParseHttpRequest(_socket);
+            ParseHttpRequest(_socket, timeout);
         }
+
+        /// <summary>
+        /// Creates an instance of HttpSocketRequestResponse from the supplied Socket. This constructor will wait forever for HTTP data.
+        /// </summary>
+        public HttpSocketRequestResponse(Socket socket) : this(socket, 0) { }
 
         public IRequest Request {
             get { return (IRequest)this; }
@@ -175,9 +184,9 @@ namespace aspNETserve {
 
         #endregion
 
-        protected void ParseHttpRequest(Socket com) {
+        protected void ParseHttpRequest(Socket com, int timeout) {
             com.Blocking = true;
-            com.ReceiveTimeout = 30000;
+            com.ReceiveTimeout = timeout;
             _localEndPoint = (System.Net.IPEndPoint)com.LocalEndPoint;
             _remoteEndPoint = (System.Net.IPEndPoint)com.RemoteEndPoint;
             List<byte> rawDataBuffer = new List<byte>();
