@@ -116,6 +116,15 @@ namespace aspNETserve {
             set { _keepAliveRequestTimeout = value; }
         }
 
+        public virtual int MaxConnections {
+            get { return _maxConnections; }
+            set {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException("MaxConnections must be greater than zero.");
+                _maxConnections = value;
+            }
+        }
+
         protected virtual void PrepareServerVariables() {
             _serverVariables = new Dictionary<string, string>();
             _serverVariables.Add("SERVER_SOFTWARE", "aspNETserve/" + Version());
