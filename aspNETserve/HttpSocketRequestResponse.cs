@@ -211,16 +211,18 @@ namespace aspNETserve {
                             int len = rawDataBuffer.Count;
                             //the check the last four positions for...
                             //13, 10, 13, 10 = "\r\n\r\n"
-                            headerReceived = rawDataBuffer[len - 1] == (byte)10 &&
-                                    rawDataBuffer[len - 2] == (byte)13 &&
-                                    rawDataBuffer[len - 3] == (byte)10 &&
-                                    rawDataBuffer[len - 4] == (byte)13;
+                            headerReceived = 
+                                    rawDataBuffer[len - 1] == 10 &&
+                                    rawDataBuffer[len - 2] == 13 &&
+                                    rawDataBuffer[len - 3] == 10 &&
+                                    rawDataBuffer[len - 4] == 13;
                         }
                     }
                 }
             }
             string httpRequestData = Encoding.ASCII.GetString(rawDataBuffer.ToArray());
             if (httpRequestData.StartsWith("POST")) {
+                //at this point we have all of the HTTP headers, but we have possibly left some post data on the socket.
                 int offset = httpRequestData.IndexOf("Content-Length:");
                 offset += 15;
                 string strLength = "";
@@ -230,18 +232,22 @@ namespace aspNETserve {
                     i++;
                 }
                 strLength = strLength.Trim();
-                int length = int.Parse(strLength);
-                buffer = new byte[length];
+                int length = int.Parse(strLength);  //now we know how much post data we should have received...
+
                 int offsetToContent = httpRequestData.IndexOf("\r\n\r\n") + 4;
                 int bytesHave = httpRequestData.Length - offsetToContent;
-                int bytesNeed = length - bytesHave;
-                if (bytesHave < length) {
+                int bytesNeed = length - bytesHave; //now we know how much (if any) data is left on the socket
+
+                if (bytesHave < length) {   //if we've left any we need to go and get it
                     buffer = new byte[bytesNeed];
                     try {
                         com.Receive(buffer, bytesNeed, SocketFlags.None);
+                        //TODO we should probably look at the return value from Receive to ensure we received
+                        //the amount of data we we're expecting.
                     } catch (SocketException) {
                         throw; //oops!
                     }
+                    //now that we've featched the remaining data, just append it to the existing http message.
                     httpRequestData += Encoding.ASCII.GetString(buffer, 0, bytesNeed);
                     for (i = 0; i != bytesNeed; i++)
                         rawDataBuffer.Add(buffer[i]);
