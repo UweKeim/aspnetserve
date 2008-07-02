@@ -103,7 +103,11 @@ namespace aspNETserve {
         /// </summary>
         public virtual int InitialRequestTimeout {
             get { return _initialRequestTimeout; }
-            set { _initialRequestTimeout = value; }
+            set {
+                if(value <= 0)
+                    throw new ArgumentOutOfRangeException("InitialRequestTimeout must be greater than zero.");
+                _initialRequestTimeout = value;
+            }
         }
 
         /// <summary>
@@ -113,9 +117,18 @@ namespace aspNETserve {
         /// </summary>
         public virtual int KeepAliveRequestTimeout {
             get { return _keepAliveRequestTimeout; }
-            set { _keepAliveRequestTimeout = value; }
+            set {
+                if(value <= 0)
+                    throw new ArgumentOutOfRangeException("KeepAliveRequestTimeout must be greater than zero.");
+                _keepAliveRequestTimeout = value;
+            }
         }
 
+        /// <summary>
+        /// The maximum number of simultaneous connections allowed.
+        /// Incoming requests will be declined once the maximum amount
+        /// has been reached.
+        /// </summary>
         public virtual int MaxConnections {
             get { return _maxConnections; }
             set {
