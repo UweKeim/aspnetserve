@@ -17,6 +17,13 @@
     </exec>
   </target>
 
+  <target name="GacUninstall">
+    <exec program="C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\gacutil.exe">
+      <arg value="/u" />
+      <arg value="aspNETserve.Core" />
+    </exec>
+  </target>
+
   <target name="UnitTest" depends="build">
     <exec program="./References/NUnit 2.4.3/bin/nunit-console.exe">
       <arg value="./UnitTests/bin/Debug/UnitTests.dll" />
