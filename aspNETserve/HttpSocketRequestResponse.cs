@@ -18,7 +18,7 @@ using aspNETserve.Core;
 
 namespace aspNETserve {
 
-    public class HttpSocketRequestResponse : MarshalByRefObject, IRequest, IResponse, ITransaction {
+    public class HttpRequestResponse : MarshalByRefObject, IRequest, IResponse, ITransaction {
 
         private Stream _stream;
         private readonly Guid _requestId = Guid.NewGuid();
@@ -47,7 +47,7 @@ namespace aspNETserve {
         /// </summary>
         /// <param name="timeout">The timeout in milliseconds to wait for data.</param>
         /// <param name="stream">The Stream to send and receive HTTP data over.</param>
-        public HttpSocketRequestResponse(Stream stream, IPEndPoint localEndPoint, IPEndPoint remoteEndPoint, int timeout) {
+        public HttpRequestResponse(Stream stream, IPEndPoint localEndPoint, IPEndPoint remoteEndPoint, int timeout) {
             if (stream == null)
                 throw new ArgumentNullException("stream", "Stream cannot be null.");
 
@@ -72,7 +72,7 @@ namespace aspNETserve {
         /// <summary>
         /// Creates an instance of HttpSocketRequestResponse from the supplied Stream. This constructor will wait forever for HTTP data.
         /// </summary>
-        public HttpSocketRequestResponse(Stream stream, IPEndPoint localEndPoint, IPEndPoint remoteEndPoint) : this(stream, localEndPoint, remoteEndPoint, 0) { }
+        public HttpRequestResponse(Stream stream, IPEndPoint localEndPoint, IPEndPoint remoteEndPoint) : this(stream, localEndPoint, remoteEndPoint, 0) { }
 
         public IRequest Request {
             get { return (IRequest)this; }

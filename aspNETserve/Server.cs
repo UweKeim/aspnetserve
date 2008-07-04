@@ -175,10 +175,10 @@ namespace aspNETserve {
 
                 if (_openConnections < _maxConnections) {   //if the number of open connections is "safe", then continue...
 
-                    HttpSocketRequestResponse transaction = null;
+                    HttpRequestResponse transaction = null;
                     do {
                         int timeout = transaction == null ? _initialRequestTimeout : _keepAliveRequestTimeout; //the initial request and subsequent requests may have different timeouts
-                        transaction = new HttpSocketRequestResponse(new NetworkStream(com, false), (IPEndPoint)com.LocalEndPoint, (IPEndPoint)com.RemoteEndPoint, timeout);
+                        transaction = new HttpRequestResponse(new NetworkStream(com, false), (IPEndPoint)com.LocalEndPoint, (IPEndPoint)com.RemoteEndPoint, timeout);
                         _host.ProcessTransaction(transaction);
                         transaction.Response.Flush();
                     } while (transaction.Request.IsKeepAlive);  //loop while the client wants to "keep alive".
