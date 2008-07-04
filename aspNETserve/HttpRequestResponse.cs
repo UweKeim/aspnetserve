@@ -18,10 +18,17 @@ using aspNETserve.Core;
 
 namespace aspNETserve {
 
+    /// <summary>
+    /// Represents a HTTP communications channel over a Stream.
+    /// </summary>
     public class HttpRequestResponse : MarshalByRefObject, IRequest, IResponse, ITransaction {
 
-        private Stream _stream;
+        private readonly Stream _stream;
         private readonly Guid _requestId = Guid.NewGuid();
+        private readonly IPEndPoint _localEndPoint;
+        private readonly IPEndPoint _remoteEndPoint;
+
+        private const int _bufferSize = 1024;
 
         private string _httpMethod;
         //private NameValueCollection _queryString;
@@ -30,8 +37,6 @@ namespace aspNETserve {
         private byte[] _postData;
         private string[] _knownRequestHeaders;
         private IDictionary<string, string> _unknownRequestHeaders;
-        private System.Net.IPEndPoint _localEndPoint;
-        private System.Net.IPEndPoint _remoteEndPoint;
 
         private int _statusCode = (int)HttpResponseCode.Ok;
         private string _statusDescription = "OK";
@@ -40,7 +45,6 @@ namespace aspNETserve {
         private string[] _knownResponseHeaders;
         private Hashtable _unknownResponseHeaders;
         private bool _headersSent = false;
-        private int _bufferSize = 1024;
 
         /// <summary>
         /// Creates an instance of HttpSocketRequestResponse from the supplied Stream.
@@ -48,6 +52,11 @@ namespace aspNETserve {
         /// <param name="timeout">The timeout in milliseconds to wait for data.</param>
         /// <param name="stream">The Stream to send and receive HTTP data over.</param>
         public HttpRequestResponse(Stream stream, IPEndPoint localEndPoint, IPEndPoint remoteEndPoint, int timeout) {
+            /*
+             * The whole IPEndPoint for localEndPoint and remoteEndPoint is very much a leaky abstraction.
+             * For the moment there isn't much I can do as classes "down stream" need them.
+             * Those down stream classes will need to be fixed first.
+             */ 
             if (stream == null)
                 throw new ArgumentNullException("stream", "Stream cannot be null.");
 
@@ -75,11 +84,11 @@ namespace aspNETserve {
         public HttpRequestResponse(Stream stream, IPEndPoint localEndPoint, IPEndPoint remoteEndPoint) : this(stream, localEndPoint, remoteEndPoint, 0) { }
 
         public IRequest Request {
-            get { return (IRequest)this; }
+            get { return this; }
         }
 
         public IResponse Response {
-            get { return (IResponse)this; }
+            get { return this; }
         }
 
         #region IRequest Members
