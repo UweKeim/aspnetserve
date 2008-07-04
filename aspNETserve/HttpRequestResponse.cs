@@ -60,6 +60,9 @@ namespace aspNETserve {
             if (stream == null)
                 throw new ArgumentNullException("stream", "Stream cannot be null.");
 
+            if(!stream.CanTimeout && timeout > 0)
+                throw new ArgumentException("The supplied stream does not support read timeouts. Please supply an alternative stream or use a different constructor.");
+
             _localEndPoint = localEndPoint;
             _remoteEndPoint = remoteEndPoint;
 
@@ -201,7 +204,8 @@ namespace aspNETserve {
         #endregion
 
         protected void ParseHttpRequest(Stream s, int timeout) {
-            s.ReadTimeout = timeout;
+            if(s.CanTimeout && timeout > 0)
+                s.ReadTimeout = timeout;
             byte[] rawDataBuffer = new byte[0]; //start with a empty set of data... this array will be resized below.
 
             bool headerReceived = false;
