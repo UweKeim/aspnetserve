@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncServer.cs" />
-    <Compile Include="HttpSocketRequestResponse.cs" />
+    <Compile Include="HttpRequestResponse.cs" />
     <Compile Include="IAsyncServer.cs" />
     <Compile Include="IServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
