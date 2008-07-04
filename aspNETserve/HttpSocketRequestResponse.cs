@@ -20,7 +20,7 @@ namespace aspNETserve {
 
     public class HttpSocketRequestResponse : MarshalByRefObject, IRequest, IResponse, ITransaction {
 
-        private Socket _socket;
+        private Stream _stream;
         private readonly Guid _requestId = Guid.NewGuid();
 
         private string _httpMethod;
@@ -43,15 +43,16 @@ namespace aspNETserve {
         private int _bufferSize = 1024;
 
         /// <summary>
-        /// Creates an instance of HttpSocketRequestResponse from the supplied Socket.
+        /// Creates an instance of HttpSocketRequestResponse from the supplied Stream.
         /// </summary>
         /// <param name="timeout">The timeout in milliseconds to wait for data.</param>
-        public HttpSocketRequestResponse(Socket socket, int timeout) {
-            if (socket == null)
-                throw new ArgumentNullException("socket", "Socket cannot be null.");
+        /// <param name="stream">The Stream to send and receive HTTP data over.</param>
+        public HttpSocketRequestResponse(Stream stream, IPEndPoint localEndPoint, IPEndPoint remoteEndPoint, int timeout) {
+            if (stream == null)
+                throw new ArgumentNullException("stream", "Stream cannot be null.");
 
-            _localEndPoint = (System.Net.IPEndPoint)socket.LocalEndPoint;
-            _remoteEndPoint = (System.Net.IPEndPoint)socket.RemoteEndPoint;
+            _localEndPoint = localEndPoint;
+            _remoteEndPoint = remoteEndPoint;
 
             _knownRequestHeaders = new string[HttpWorkerRequest.RequestHeaderMaximum];
             for (int i = 0; i != HttpWorkerRequest.RequestHeaderMaximum; i++)
@@ -62,15 +63,16 @@ namespace aspNETserve {
             _knownResponseHeaders = new string[HttpWorkerRequest.ResponseHeaderMaximum];
             for (int i = 0; i != HttpWorkerRequest.ResponseHeaderMaximum; i++)
                 _knownResponseHeaders[i] = "";
-            _socket = socket;
 
-            ParseHttpRequest(new NetworkStream(_socket, false), timeout);
+            _stream = stream;
+
+            ParseHttpRequest(_stream, timeout);
         }
 
         /// <summary>
-        /// Creates an instance of HttpSocketRequestResponse from the supplied Socket. This constructor will wait forever for HTTP data.
+        /// Creates an instance of HttpSocketRequestResponse from the supplied Stream. This constructor will wait forever for HTTP data.
         /// </summary>
-        public HttpSocketRequestResponse(Socket socket) : this(socket, 0) { }
+        public HttpSocketRequestResponse(Stream stream, IPEndPoint localEndPoint, IPEndPoint remoteEndPoint) : this(stream, localEndPoint, remoteEndPoint, 0) { }
 
         public IRequest Request {
             get { return (IRequest)this; }
@@ -180,7 +182,7 @@ namespace aspNETserve {
 
         void IResponse.Flush() {
             byte[] rawResponse = ToHttpResponse();
-            _socket.Send(rawResponse);
+            _stream.Write(rawResponse, 0, rawResponse.Length);
         }
 
         bool IResponse.HeadersSent {
