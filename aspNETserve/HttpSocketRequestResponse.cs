@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
@@ -39,6 +40,7 @@ namespace aspNETserve {
         private string[] _knownResponseHeaders;
         private Hashtable _unknownResponseHeaders;
         private bool _headersSent = false;
+        private int _bufferSize = 1024;
 
         /// <summary>
         /// Creates an instance of HttpSocketRequestResponse from the supplied Socket.
@@ -47,6 +49,9 @@ namespace aspNETserve {
         public HttpSocketRequestResponse(Socket socket, int timeout) {
             if (socket == null)
                 throw new ArgumentNullException("socket", "Socket cannot be null.");
+
+            _localEndPoint = (System.Net.IPEndPoint)socket.LocalEndPoint;
+            _remoteEndPoint = (System.Net.IPEndPoint)socket.RemoteEndPoint;
 
             _knownRequestHeaders = new string[HttpWorkerRequest.RequestHeaderMaximum];
             for (int i = 0; i != HttpWorkerRequest.RequestHeaderMaximum; i++)
@@ -59,7 +64,7 @@ namespace aspNETserve {
                 _knownResponseHeaders[i] = "";
             _socket = socket;
 
-            ParseHttpRequest(_socket, timeout);
+            ParseHttpRequest(new NetworkStream(_socket, false), timeout);
         }
 
         /// <summary>
@@ -184,43 +189,40 @@ namespace aspNETserve {
 
         #endregion
 
-        protected void ParseHttpRequest(Socket com, int timeout) {
-            com.Blocking = true;
-            com.ReceiveTimeout = timeout;
-            _localEndPoint = (System.Net.IPEndPoint)com.LocalEndPoint;
-            _remoteEndPoint = (System.Net.IPEndPoint)com.RemoteEndPoint;
-            List<byte> rawDataBuffer = new List<byte>();
-            int count;
-            byte[] buffer = new byte[1024];
+        protected void ParseHttpRequest(Stream s, int timeout) {
+            s.ReadTimeout = timeout;
+            byte[] rawDataBuffer = new byte[0]; //start with a empty set of data... this array will be resized below.
 
             bool headerReceived = false;
-            while (!headerReceived) {
-                com.Poll(100000, SelectMode.SelectRead); //wait up to 100ms for data
-                try {
-                    count = com.Receive(buffer, 1024, SocketFlags.None);
-                } catch (SocketException) {
-                    //we should probably throw something more meaningful here
-                    throw;  //oops!
+            while (!headerReceived) {   //loop while the crlf crlf sequence signaling the end of the HTTP header has not been reached...
+                byte[] buffer = new byte[_bufferSize];
+                
+                int bytesRead = s.Read(buffer, 0, _bufferSize);
+                if(bytesRead == 0)
+                    break;  //since there is nothing left then stop
+
+                int oldRawDataBufferSize = rawDataBuffer.Length;
+                //resize the raw data buffer to hold the new contents, and copy it over
+                Array.Resize(ref rawDataBuffer, rawDataBuffer.Length + bytesRead);
+                Buffer.BlockCopy(buffer, 0, rawDataBuffer, oldRawDataBufferSize, bytesRead);
+
+                int startOffset = oldRawDataBufferSize >= 3 ? oldRawDataBufferSize - 3 : 0;
+                int stopOffset = startOffset + bytesRead - 3;
+                //loop over the newly received data looking for "\r\n\r\n" to tell use that we've received the entire HTTP header.
+                for(int i = startOffset; i < stopOffset && !headerReceived; i++) {
+                    headerReceived =
+                        rawDataBuffer[i] == 13 &&
+                        rawDataBuffer[i + 1] == 10 &&
+                        rawDataBuffer[i + 2] == 13 &&
+                        rawDataBuffer[i + 3] == 10;
                 }
-                if (count != 0) {
-                    for (int i = 0; i != count; i++) {
-                        rawDataBuffer.Add(buffer[i]);
-                        //as we are copying the newly received data into our rawDataBuffer check to see if 
-                        //we've encountered a \r\n\r\n (i.e. the end of headers)
-                        if (!headerReceived && rawDataBuffer.Count > 4) { //if we haven't already hit the end of the header, and have enough data...
-                            int len = rawDataBuffer.Count;
-                            //the check the last four positions for...
-                            //13, 10, 13, 10 = "\r\n\r\n"
-                            headerReceived = 
-                                    rawDataBuffer[len - 1] == 10 &&
-                                    rawDataBuffer[len - 2] == 13 &&
-                                    rawDataBuffer[len - 3] == 10 &&
-                                    rawDataBuffer[len - 4] == 13;
-                        }
-                    }
-                }
+            }   //end of header loop.
+
+            if (!headerReceived) {  //if we get here and haven't received a full header the something bad happened.
+                throw new Exception("Unable to receive headers.");
             }
-            string httpRequestData = Encoding.ASCII.GetString(rawDataBuffer.ToArray());
+
+            string httpRequestData = Encoding.ASCII.GetString(rawDataBuffer);
             if (httpRequestData.StartsWith("POST")) {
                 //at this point we have all of the HTTP headers, but we have possibly left some post data on the socket.
                 int offset = httpRequestData.IndexOf("Content-Length:");
@@ -239,9 +241,9 @@ namespace aspNETserve {
                 int bytesNeed = length - bytesHave; //now we know how much (if any) data is left on the socket
 
                 if (bytesHave < length) {   //if we've left any we need to go and get it
-                    buffer = new byte[bytesNeed];
+                    byte[] buffer = new byte[bytesNeed];
                     try {
-                        com.Receive(buffer, bytesNeed, SocketFlags.None);
+                        s.Read(buffer, 0, bytesNeed);
                         //TODO we should probably look at the return value from Receive to ensure we received
                         //the amount of data we we're expecting.
                     } catch (SocketException) {
@@ -249,11 +251,12 @@ namespace aspNETserve {
                     }
                     //now that we've featched the remaining data, just append it to the existing http message.
                     httpRequestData += Encoding.ASCII.GetString(buffer, 0, bytesNeed);
-                    for (i = 0; i != bytesNeed; i++)
-                        rawDataBuffer.Add(buffer[i]);
+                    Array.Resize(ref rawDataBuffer, rawDataBuffer.Length + bytesNeed);
+                    Buffer.BlockCopy(buffer, 0, rawDataBuffer, rawDataBuffer.Length - bytesNeed, bytesNeed);
+
                 }
                 _postData = new byte[length];
-                Buffer.BlockCopy(rawDataBuffer.ToArray(), offsetToContent, _postData, 0, length);
+                Buffer.BlockCopy(rawDataBuffer, offsetToContent, _postData, 0, length);
             }
 
             if (!ParseHttpHeaders(httpRequestData))
