@@ -1,10 +1,18 @@
-﻿using System;
+﻿/************************************************************************
+ * Copyright (c) 2006-2008, Jason Whitehorn (jason.whitehorn@gmail.com)
+ * All rights reserved.
+ * 
+ * Source code and binaries distributed under the terms of the included
+ * license, see license.txt for details.
+ ************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
 using aspNETserve;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace UnitTests {
     [TestFixture]
@@ -28,6 +36,20 @@ namespace UnitTests {
             //can do is test for the above generic exception.
             MemoryStream stream = GetRequestStream("GET / HTTP/1.1", "");
             HttpRequestResponse httpRequestResponse = new HttpRequestResponse(stream, null, null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "The supplied stream does not support read timeouts. Please supply an alternative stream or use a different constructor.")]
+        public void HttpRequestResponse_Construction_With_Non_Timeout_Stream_Test() {
+            MockRepository mocks = new MockRepository();
+
+            Stream s = mocks.CreateMock<Stream>();
+            using(mocks.Unordered()) {
+                Expect.Call(s.CanTimeout).Return(false);
+            }
+            mocks.ReplayAll();
+
+            HttpRequestResponse httpRequestResponse = new HttpRequestResponse(s, null, null, 400);
         }
 
         private MemoryStream GetRequestStream(params string[] lines) {
