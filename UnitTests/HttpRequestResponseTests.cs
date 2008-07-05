@@ -40,7 +40,7 @@ namespace UnitTests {
 
         [Test]
         [ExpectedException(typeof(ArgumentException), ExpectedMessage = "The supplied stream does not support read timeouts. Please supply an alternative stream or use a different constructor.")]
-        public void HttpRequestResponse_Construction_With_Non_Timeout_Stream_Test() {
+        public void HttpRequestResponse_Construction_With_Non_Timeout_Stream_When_Specifying_Timeout_Test() {
             MockRepository mocks = new MockRepository();
 
             Stream s = mocks.CreateMock<Stream>();
@@ -50,6 +50,14 @@ namespace UnitTests {
             mocks.ReplayAll();
 
             HttpRequestResponse httpRequestResponse = new HttpRequestResponse(s, null, null, 400);
+        }
+
+        [Test]
+        public void HttpRequestResponse_Construction_With_Non_Timeout_Stream_Test() {
+            Stream s = GetRequestStream("GET / HTTP/1.1", "Host: Localhost", "");
+            Assert.IsFalse(s.CanTimeout);
+
+            HttpRequestResponse httpRequestResponse = new HttpRequestResponse(s, null, null);
         }
 
         private MemoryStream GetRequestStream(params string[] lines) {
