@@ -4,7 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{4496822D-C12E-437A-9334-7A46E619CDCF}"
 	ProjectSection(SolutionItems) = preProject
 		aspNETserve.build = aspNETserve.build
-		aspNETserve.config.xsd = aspNETserve.config.xsd
 		license.txt = license.txt
 		nant.bat = nant.bat
 	EndProjectSection
