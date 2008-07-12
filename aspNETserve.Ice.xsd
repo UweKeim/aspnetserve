@@ -6,12 +6,7 @@
   Source code and binaries distributed under the terms of the included
   license, see license.txt for details.
 -->
-<xs:schema targetNamespace="http://tempuri.org/XMLSchema.xsd"
-    elementFormDefault="qualified"
-    xmlns="http://tempuri.org/XMLSchema.xsd"
-    xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="server">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
