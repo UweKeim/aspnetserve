@@ -7,10 +7,13 @@
  ************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace aspNETserve.Configuration {
-    public interface IConfiguration {
-        IList<IApplication> Applications { get; }
+    public interface IEndPoint {
+        IPAddress Ip { get; }
+        int Port { get; }
+        bool IsSecure { get; }
     }
 }

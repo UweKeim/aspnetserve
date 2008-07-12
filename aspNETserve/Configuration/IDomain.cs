@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace aspNETserve.Configuration {
-    public interface IConfiguration {
-        IList<IApplication> Applications { get; }
+    public interface IDomain {
+        string Name { get; }
     }
 }

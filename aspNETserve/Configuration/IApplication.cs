@@ -10,7 +10,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace aspNETserve.Configuration {
-    public interface IConfiguration {
-        IList<IApplication> Applications { get; }
+    public interface IApplication {
+        string PhysicalPath { get; }
+        string VirtualPath { get; }
+        IList<IDomain> Domains { get; }
+        IList<IEndPoint> IEndPoints { get; }
     }
 }

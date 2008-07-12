@@ -59,7 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncServer.cs" />
+    <Compile Include="Configuration\IApplication.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
+    <Compile Include="Configuration\IDomain.cs" />
+    <Compile Include="Configuration\IEndPoint.cs" />
     <Compile Include="HttpRequestResponse.cs" />
     <Compile Include="IAsyncServer.cs" />
     <Compile Include="IServer.cs" />
