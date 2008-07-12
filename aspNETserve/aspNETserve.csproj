@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncServer.cs" />
+    <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="HttpRequestResponse.cs" />
     <Compile Include="IAsyncServer.cs" />
     <Compile Include="IServer.cs" />
@@ -93,9 +94,6 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configuration\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
