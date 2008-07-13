@@ -15,6 +15,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
 using aspNETserve.Core;
+using aspNETserve.Configuration;
 
 namespace aspNETserve {
     /// <summary>
@@ -50,6 +51,17 @@ namespace aspNETserve {
             _appManager = ApplicationManager.GetApplicationManager();
             PrepareServerVariables();
             ConfigureResponses();
+        }
+
+        public Server(IApplication application) : this( application.EndPoints[0].Ip, 
+                                                        application.Domains[0].VirtualPath, 
+                                                        application.PhysicalPath,
+                                                        application.EndPoints[0].Port) {
+            /*
+             * This constructort takes simple-minded approach to reading configuration elements 
+             * from an IApplication. While not robust, it is functional. A more complete
+             * implementation "will come soon" :-).
+             */
         }
 
         public virtual void Start() {

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Threading;
+using aspNETserve.Configuration;
 
 namespace aspNETserve {
     /// <summary>
@@ -21,6 +22,8 @@ namespace aspNETserve {
 
         public AsyncServer(IPAddress endPoint, string virtualDir, string physicalDir, int port)
             : base(endPoint, virtualDir, physicalDir, port) { }
+
+        public AsyncServer(IApplication application) : base(application) {}
 
         public virtual void StartAsync() {
             bool queued = ThreadPool.QueueUserWorkItem(
