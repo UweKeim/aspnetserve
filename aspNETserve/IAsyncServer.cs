@@ -12,7 +12,10 @@ using System.Text;
 namespace aspNETserve {
     public interface IAsyncServer : IServer {
         void StartAsync();
+        void StopAsync();
         event EventHandler ServerRunning;
+        event EventHandler ServerStopped;
         event EventHandler FailureStarting;
+        event EventHandler FailureStopping;
     }
 }

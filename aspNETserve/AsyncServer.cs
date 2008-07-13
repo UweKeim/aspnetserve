@@ -19,6 +19,8 @@ namespace aspNETserve {
     public class AsyncServer : Server, IAsyncServer {
         private EventHandler _serverRunning;
         private EventHandler _failureStarting;
+        private EventHandler _serverStopped;
+        private EventHandler _failureStopping;
 
         public AsyncServer(IPAddress endPoint, string virtualDir, string physicalDir, int port)
             : base(endPoint, virtualDir, physicalDir, port) { }
@@ -36,6 +38,17 @@ namespace aspNETserve {
                 throw new ApplicationException("Error starting");
         }
 
+        public virtual void StopAsync() {
+            bool queued = ThreadPool.QueueUserWorkItem(
+                delegate {
+                    try {
+                        Stop();
+                    } catch { } //this needs to be supressed in this context
+                });
+            if (!queued)
+                throw new ApplicationException("Error starting");
+        }
+
         public virtual event EventHandler ServerRunning {
             add { _serverRunning += value; }
             remove { _serverRunning -= value; }
@@ -46,15 +59,37 @@ namespace aspNETserve {
             remove { _failureStarting -= value; }
         }
 
+        public virtual event EventHandler ServerStopped {
+            add { _serverStopped += value; }
+            remove { _serverStopped -= value; }
+        }
+
+        public virtual event EventHandler FailureStopping {
+            add { _failureStopping += value; }
+            remove { _failureStopping -= value; }
+        }
+
         protected override void SetStatus(ServerStatus status) {
             ServerStatus previousStatus = Status;
             base.SetStatus(status);
 
+            if(status == previousStatus)
+                return; //if there was not real state change (for whatever reason) then none of the below...
+                        //...events matter. So there is no need to go any further.
+
             if (Status == ServerStatus.Running && _serverRunning != null)
-                _serverRunning(this, EventArgs.Empty);
+                _serverRunning(this, EventArgs.Empty);  //regardless of the previous state, if we are running fire the "ServerRunning" event
 
             if (previousStatus == ServerStatus.Starting && Status == ServerStatus.Stopped && _failureStarting != null)
-                _failureStarting(this, EventArgs.Empty);
+                _failureStarting(this, EventArgs.Empty);    //if we were starting but have now stopped this indicates a failure starting.
+
+            if (Status == ServerStatus.Stopped && _serverStopped != null)
+                _serverStopped(this, EventArgs.Empty);  //regardless of the previous state, if we've stopped fire the "ServerStopped" event
+
+            if (previousStatus == ServerStatus.ShuttingDown && Status == ServerStatus.Running && _failureStopping != null)
+                _failureStopping(this, EventArgs.Empty);    //if we were trying to stop, but have now given up and continued running
+                                                            //fire the "FailureStopping" event.
+
         }
     }
 }
