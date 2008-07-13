@@ -13,6 +13,6 @@ namespace aspNETserve.Configuration {
     public interface IApplication {
         string PhysicalPath { get; }
         IList<IDomain> Domains { get; }
-        IList<IEndPoint> IEndPoints { get; }
+        IList<IEndPoint> EndPoints { get; }
     }
 }
