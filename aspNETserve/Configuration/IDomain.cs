@@ -12,5 +12,6 @@ using System.Text;
 namespace aspNETserve.Configuration {
     public interface IDomain {
         string Name { get; }
+        string VirtualPath { get; }
     }
 }

@@ -12,7 +12,6 @@ using System.Text;
 namespace aspNETserve.Configuration {
     public interface IApplication {
         string PhysicalPath { get; }
-        string VirtualPath { get; }
         IList<IDomain> Domains { get; }
         IList<IEndPoint> IEndPoints { get; }
     }

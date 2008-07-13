@@ -16,6 +16,7 @@
               <xs:element name="domain" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:attribute name="name" type="xs:string" />
+                  <xs:attribute name="virtualPath" type="xs:string" />
                 </xs:complexType>
               </xs:element>
               <xs:element name="endpoint" minOccurs="1" maxOccurs="unbounded">
@@ -27,7 +28,6 @@
               </xs:element>
             </xs:sequence>
             <xs:attribute name="physicalPath" type="xs:string" />
-            <xs:attribute name="virtualPath" type="xs:string" />
           </xs:complexType>
         </xs:element>
       </xs:choice>
