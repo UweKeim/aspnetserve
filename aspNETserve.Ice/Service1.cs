@@ -30,7 +30,7 @@ namespace aspNETserve.Ice {
 
             //setup a file watcher that will cycle the applications 
             //in case of a configuration change.
-            _fileWatcher = new FileSystemWatcher(_configFileName);
+            _fileWatcher = new FileSystemWatcher(Environment.CurrentDirectory, _configFileName);
             _fileWatcher.Changed += delegate { CycleServer(); };
         }
 
