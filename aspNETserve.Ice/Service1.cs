@@ -12,6 +12,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
@@ -30,8 +31,12 @@ namespace aspNETserve.Ice {
 
             //setup a file watcher that will cycle the applications 
             //in case of a configuration change.
-            _fileWatcher = new FileSystemWatcher(Environment.CurrentDirectory, _configFileName);
+            _fileWatcher = new FileSystemWatcher(Environment.CurrentDirectory, ConfigFileName);
             _fileWatcher.Changed += delegate { CycleServer(); };
+        }
+
+        public void Start() {
+            OnStart(null);
         }
 
         protected override void OnStart(string[] args) {
@@ -83,7 +88,7 @@ namespace aspNETserve.Ice {
 
             _servers = new List<IAsyncServer>(); //construct a new collection of servers
 
-            using (FileStream configFile = File.OpenRead(_configFileName)) {
+            using (FileStream configFile = File.OpenRead(ConfigFileName)) {
                 //using the configuration file, read the application config elements...
 
                 IConfiguration config = XmlConfigurationManager.FromXml(configFile);
@@ -91,6 +96,14 @@ namespace aspNETserve.Ice {
                     IAsyncServer server = new AsyncServer(application); //... to construct each server.
                     _servers.Add(server);   //...and add it to the collection.
                 }
+            }
+        }
+
+        private string ConfigFileName {
+            get {
+                string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string result = Path.Combine(path, _configFileName);
+                return result;
             }
         }
     }
