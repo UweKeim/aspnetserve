@@ -4,6 +4,10 @@
   
   <target name="build">
     <msbuild project="aspNETserve.sln">
+      <property name="Configuration" value="Release"/>
+      <property name="Platform" value="Any CPU" />
+    </msbuild>
+    <msbuild project="aspNETserve.sln">
       <property name="Configuration" value="Debug"/>
       <property name="Platform" value="Any CPU" />
     </msbuild>
@@ -27,6 +31,19 @@
   <target name="UnitTest" depends="build">
     <exec program="./References/NUnit 2.4.3/bin/nunit-console.exe">
       <arg value="./UnitTests/bin/Debug/UnitTests.dll" />
+    </exec>
+  </target>
+
+  <target name="InstallService" depends="build">
+    <exec program="C:\Windows\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe">
+      <arg value="./aspNETserve.Ice/bin/Release/aspNETserve.Ice.exe" />
+    </exec>
+  </target>
+
+  <target name="UninstallService">
+    <exec program="C:\Windows\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe">
+      <arg value="/u" />
+      <arg value="./aspNETserve.Ice/bin/Release/aspNETserve.Ice.exe" />
     </exec>
   </target>
 </project>
