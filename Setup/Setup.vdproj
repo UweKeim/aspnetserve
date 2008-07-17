@@ -21,26 +21,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6A4F64970746B073A501BD0DF42B4D58"
-        "OwnerKey" = "8:_D51D2D4EB42477A41E9C7A44A3B66D07"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6A4F64970746B073A501BD0DF42B4D58"
+        "MsmKey" = "8:_38848DF2B484D3C5155EB5435C7FFB37"
         "OwnerKey" = "8:_D328072A2F184A9A9A53073E8D259AD6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8B4CC3A6B01E8C969AEABCF8F5268DF7"
-        "OwnerKey" = "8:_D328072A2F184A9A9A53073E8D259AD6"
+        "MsmKey" = "8:_38848DF2B484D3C5155EB5435C7FFB37"
+        "OwnerKey" = "8:_E9A4FE00720F3AB5F3C76AC695246625"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8B4CC3A6B01E8C969AEABCF8F5268DF7"
-        "OwnerKey" = "8:_D51D2D4EB42477A41E9C7A44A3B66D07"
+        "MsmKey" = "8:_38848DF2B484D3C5155EB5435C7FFB37"
+        "OwnerKey" = "8:_F56CE1ED01A44CBEA51C123B001D29F5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -51,32 +45,44 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D51D2D4EB42477A41E9C7A44A3B66D07"
+        "MsmKey" = "8:_E9A4FE00720F3AB5F3C76AC695246625"
+        "OwnerKey" = "8:_D328072A2F184A9A9A53073E8D259AD6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E9A4FE00720F3AB5F3C76AC695246625"
+        "OwnerKey" = "8:_F56CE1ED01A44CBEA51C123B001D29F5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F56CE1ED01A44CBEA51C123B001D29F5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D328072A2F184A9A9A53073E8D259AD6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D328072A2F184A9A9A53073E8D259AD6"
+        "OwnerKey" = "8:_38848DF2B484D3C5155EB5435C7FFB37"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8B4CC3A6B01E8C969AEABCF8F5268DF7"
+        "OwnerKey" = "8:_F56CE1ED01A44CBEA51C123B001D29F5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D51D2D4EB42477A41E9C7A44A3B66D07"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6A4F64970746B073A501BD0DF42B4D58"
+        "OwnerKey" = "8:_E9A4FE00720F3AB5F3C76AC695246625"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -184,45 +190,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6A4F64970746B073A501BD0DF42B4D58"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_38848DF2B484D3C5155EB5435C7FFB37"
             {
             "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:aspNETserve.Core, Version=1.3.3119.37024, Culture=neutral, PublicKeyToken=5a91175c78782415, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_6A4F64970746B073A501BD0DF42B4D58"
-                    {
-                    "Name" = "8:log4net.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:log4net.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_B157E035B740452784FD770B38250CC0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8B4CC3A6B01E8C969AEABCF8F5268DF7"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:aspNETserve.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=5a91175c78782415, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_8B4CC3A6B01E8C969AEABCF8F5268DF7"
+                    "_38848DF2B484D3C5155EB5435C7FFB37"
                     {
                     "Name" = "8:aspNETserve.Core.dll"
                     "Attributes" = "3:512"
@@ -246,14 +221,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D51D2D4EB42477A41E9C7A44A3B66D07"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E9A4FE00720F3AB5F3C76AC695246625"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:aspNETserve, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:aspNETserve, Version=1.3.3119.37026, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_D51D2D4EB42477A41E9C7A44A3B66D07"
+                    "_E9A4FE00720F3AB5F3C76AC695246625"
                     {
                     "Name" = "8:aspNETserve.dll"
                     "Attributes" = "3:512"
@@ -356,7 +331,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:aspNETserve"
         "ProductCode" = "8:{40530063-37C8-41F2-9E20-14CA965EB0C2}"
-        "PackageCode" = "8:{0DFB997B-D2EC-48E1-8309-64D5330EDA0B}"
+        "PackageCode" = "8:{F405D6BA-40DE-47DE-B242-F25FB7FFAEED}"
         "UpgradeCode" = "8:{74249662-6F1B-4C4E-83C2-E0DA2ED1E88D}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -371,7 +346,7 @@
         "ARPCONTACT" = "8:Jason Whitehorn"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
-        "ARPURLINFOABOUT" = "8:http://codeplex.com/aspNETserve"
+        "ARPURLINFOABOUT" = "8:http://aspNETserve.info/"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
@@ -982,7 +957,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D328072A2F184A9A9A53073E8D259AD6"
             {
-            "SourcePath" = "8:..\\SimpleWebServer\\obj\\Release\\SimpleWebServer.exe"
+            "SourcePath" = "8:..\\SimpleWebServer\\obj\\Debug\\SimpleWebServer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B157E035B740452784FD770B38250CC0"
@@ -1003,6 +978,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{2794FDA8-9853-4835-B110-EE03C6DAF21A}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F56CE1ED01A44CBEA51C123B001D29F5"
+            {
+            "SourcePath" = "8:..\\aspNETserve.Ice\\obj\\Debug\\aspNETserve.Ice.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B157E035B740452784FD770B38250CC0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{419627BA-9AC0-431A-8E53-13C755BBB1A3}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
