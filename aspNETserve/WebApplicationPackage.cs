@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace aspNETserve {
     /// <summary>
@@ -9,8 +11,9 @@ namespace aspNETserve {
     /// </summary>
     public class WebApplicationPackage : IDisposable {
         private bool _isOpen;
-        private bool _ownsStream;
-        private Stream _stream;
+        private readonly bool _ownsStream;
+        private readonly Stream _stream;
+        private const int _bufferSize = 4096;
         private string _physicalPath;
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace aspNETserve {
             if(_ownsStream)
                 _stream.Close();
             if(IsOpen)
-                DeleteExtractedArchive();
+                DeleteDirectory(_physicalPath);
             IsOpen = false;
         }
 
@@ -78,11 +81,43 @@ namespace aspNETserve {
         }
 
         protected virtual void ExtractWapToPath(string path) {
-            throw new NotImplementedException();
+            /*
+             * This method is not as effecient as it could be.
+             * It takes a stream (which could be a filestream)
+             * and writes it out to disk, before it extracts
+             * the compressed contents. For large files that
+             * already exist on disk, this is wasteful.
+             * 
+             * This was a trade off of developer time vs.
+             * computer time. Perhaps in the future this will
+             * be revisited.
+             */ 
+            string tempFilename = Path.GetRandomFileName();
+            string zipFilename = Path.Combine(path, tempFilename);
+            byte[] buffer = new byte[_bufferSize];
+
+            using (FileStream zipFile = File.Create(zipFilename)) {
+                StreamUtils.Copy(_stream, zipFile, buffer);
+                zipFile.Close();
+            }
+
+            FastZip fz = new FastZip();
+            fz.ExtractZip(zipFilename, path, string.Empty);
+
+            File.Delete(zipFilename);
         }
 
-        protected virtual void DeleteExtractedArchive() {
-            throw new NotImplementedException();
+        protected virtual void DeleteDirectory(string path) {
+            string[] files = Directory.GetFiles(path);
+            foreach(string file in files) {
+                File.Delete(file);
+            }
+
+            string[] subDirs = Directory.GetDirectories(path);
+            foreach(string subDir in subDirs) {
+                DeleteDirectory(subDir);
+            }
+            Directory.Delete(path);
         }
     }
 }
