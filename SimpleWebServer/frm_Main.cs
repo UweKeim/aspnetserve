@@ -10,11 +10,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using aspNETserve;
 
 namespace SimpleWebServer {
     public partial class frm_Main : Form {
+        private WebApplicationPackage _wap; 
         public frm_Main(string[] args) {
             InitializeComponent();
             if (args != null && args.Length > 0) {
@@ -27,13 +30,25 @@ namespace SimpleWebServer {
             DisplayStatus();
         }
 
+        protected override void OnClosing(CancelEventArgs e) {
+            base.OnClosing(e);
+            CloseWapIfNeeded();
+        }
+
         private void btnStart_Click(object sender, EventArgs e) {
             System.Threading.Thread.Sleep(10);
             pictureBox1.Refresh();
             pnlPleaseWait.Visible = true;
             pnlButtons.Visible = false;
             if (Program.Server == null) {
-                Program.Server = new aspNETserve.AsyncServer(System.Net.IPAddress.Any, txtVirtualDir.Text, txtPhysicalDir.Text, int.Parse(txtPort.Text));
+
+                if(txtPhysicalDir.Text.ToLower().Trim().EndsWith(".wap")) {
+                    _wap = new WebApplicationPackage(File.Open(txtPhysicalDir.Text, FileMode.Open), true);
+                    _wap.Open();
+                    Program.Server = new AsyncServer(System.Net.IPAddress.Any, txtVirtualDir.Text, _wap.PhysicalPath, int.Parse(txtPort.Text));                    
+                }else {
+                    Program.Server = new AsyncServer(System.Net.IPAddress.Any, txtVirtualDir.Text, txtPhysicalDir.Text, int.Parse(txtPort.Text));   
+                }
                 Program.Server.ServerRunning += OnServerRunning;
                 Program.Server.FailureStarting += OnServerStartFailure;
                 try {
@@ -50,6 +65,7 @@ namespace SimpleWebServer {
                 Program.Server.Stop();
                 Program.Server = null;
             }
+            CloseWapIfNeeded();
             DisplayStatus();
         }
 
@@ -65,6 +81,7 @@ namespace SimpleWebServer {
 
         private void OnServerStartFailure(object sender, EventArgs e) {
             Program.Server = null;
+            CloseWapIfNeeded();
             MessageBox.Show("Unable to start server on the desired port. Please try another port.");
             DisplayStatus();
             if (pnlPleaseWait.InvokeRequired) {
@@ -148,6 +165,13 @@ namespace SimpleWebServer {
             ShowInTaskbar = true;
             WindowState = FormWindowState.Normal;
             t.Visible = false;
+        }
+
+        private void CloseWapIfNeeded() {
+            if (_wap != null) {
+                _wap.Dispose();
+                _wap = null;
+            }
         }
 
         NotifyIcon t = new NotifyIcon();
