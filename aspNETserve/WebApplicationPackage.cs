@@ -14,7 +14,7 @@ namespace aspNETserve {
         private readonly bool _ownsStream;
         private readonly Stream _stream;
         private const int _bufferSize = 4096;
-        private string _physicalPath;
+        private string _extractedPackagePath;
 
         /// <summary>
         /// Constructs an instance of WebApplicationPackage.
@@ -44,7 +44,7 @@ namespace aspNETserve {
             if(_ownsStream)
                 _stream.Close();
             if(IsOpen)
-                DeleteDirectory(_physicalPath);
+                DeleteDirectory(_extractedPackagePath);
             IsOpen = false;
         }
 
@@ -56,10 +56,10 @@ namespace aspNETserve {
                 throw new Exception("Cannot open WAP, it is already opened.");
             IsOpen = true;
             string directory = (Guid.NewGuid()).ToString();
-            _physicalPath = Path.Combine(Path.GetTempPath(), directory);
-            Directory.CreateDirectory(_physicalPath);
+            _extractedPackagePath = Path.Combine(Path.GetTempPath(), directory);
+            Directory.CreateDirectory(_extractedPackagePath);
 
-            ExtractWapToPath(_physicalPath);
+            ExtractWapToPath(_extractedPackagePath);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace aspNETserve {
             get {
                 if(!IsOpen)
                     throw new Exception("The WAP is not opened yet.");
-                return _physicalPath;
+                return Path.Combine(_extractedPackagePath, "site");    //all site data is located within a sub directory called site
             }
         }
 
