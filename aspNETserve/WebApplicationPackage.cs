@@ -55,8 +55,10 @@ namespace aspNETserve {
             if(IsOpen)
                 throw new Exception("Cannot open WAP, it is already opened.");
             IsOpen = true;
-            string directory = (new Guid()).ToString();
+            string directory = (Guid.NewGuid()).ToString();
             _physicalPath = Path.Combine(Path.GetTempPath(), directory);
+            Directory.CreateDirectory(_physicalPath);
+
             ExtractWapToPath(_physicalPath);
         }
 
