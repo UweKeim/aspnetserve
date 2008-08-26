@@ -15,14 +15,14 @@
 
   <target name="GacInstall">
     <!-- "C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\gacutil.exe" -i aspNETserve.Core.dll -->
-    <exec program="C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\gacutil.exe">
+    <exec program="gacutil.exe">
       <arg value="-i" />
       <arg value="./aspNETserve.Core/bin/Debug/aspNETserve.Core.dll" />
     </exec>
   </target>
 
   <target name="GacUninstall">
-    <exec program="C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\gacutil.exe">
+    <exec program="gacutil.exe">
       <arg value="/u" />
       <arg value="aspNETserve.Core" />
     </exec>
