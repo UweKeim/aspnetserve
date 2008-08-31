@@ -258,6 +258,21 @@ namespace aspNETserve.Core {
             SendResponseFromMemory(buffer, length);
         }
 
+        public override void SendResponseFromFile(string filename, long offset, long length) {
+            /*
+             * Opens a file given its filename, and writes the entire contents out
+             * to the client.
+             */ 
+            using (FileStream file = File.OpenRead(filename)) {
+
+                byte[] buffer = new byte[file.Length];
+                file.Read(buffer, 0, (int)file.Length);
+                SendResponseFromMemory(buffer, buffer.Length);
+
+                file.Close();
+            }
+        }
+
         public override void SendStatus(int statusCode, string statusDescription) {
             _response.StatusCode = statusCode;
             _response.StatusDescription = statusDescription;
@@ -315,9 +330,6 @@ namespace aspNETserve.Core {
         }
         public override int ReadEntityBody(byte[] buffer, int size) {
             return base.ReadEntityBody(buffer, size);
-        }
-        public override void SendResponseFromFile(string filename, long offset, long length) {
-            throw new Exception("The method or operation is not implemented.");
         }
         public override void SendResponseFromFile(IntPtr handle, long offset, long length) {
             throw new Exception("The method or operation is not implemented.");
