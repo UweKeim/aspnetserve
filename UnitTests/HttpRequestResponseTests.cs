@@ -60,6 +60,15 @@ namespace UnitTests {
             HttpRequestResponse httpRequestResponse = new HttpRequestResponse(s, null, null);
         }
 
+        [Test]
+        [Description("A test to determine if a URL contained a URL encoded path is properly decode by the runtime.")]
+        public void Url_Encoded_Urls_Test() {
+            MemoryStream request = GetRequestStream("GET /virDir/A%20Path%20That%20Needs%20Encoding.aspx HTTP/1.1",
+                                                    "Host: Localhost", "");
+            HttpRequestResponse httpRequestResponse = new HttpRequestResponse(request, null, null);
+            Assert.AreEqual("/virDir/A Path That Needs Encoding.aspx", httpRequestResponse.Request.RawUrl);
+        }
+
         private MemoryStream GetRequestStream(params string[] lines) {
             MemoryStream result = new MemoryStream();
             foreach(string line in lines) {

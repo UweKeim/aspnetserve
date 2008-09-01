@@ -284,6 +284,7 @@ namespace aspNETserve {
             string resource;
             try {
                 resource = lines[0].Split(new char[] { ' ' })[1];
+                resource = HttpUtility.UrlDecode(resource); //should we url decode this? I am beginning to think so.
             } catch {
                 return false;
             }
