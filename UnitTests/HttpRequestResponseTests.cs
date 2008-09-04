@@ -69,6 +69,48 @@ namespace UnitTests {
             Assert.AreEqual("/virDir/A Path That Needs Encoding.aspx", httpRequestResponse.Request.RawUrl);
         }
 
+        [Test]
+        public void IsKeepAlive_True_Test() {
+            MemoryStream stream = GetRequestStream("GET / HTTP/1.1", "Host: Localhost", "Connection: Keep-Alive", "");
+            HttpRequestResponse httpRequestResponse = new HttpRequestResponse(stream, null, null);
+
+            Assert.IsTrue(httpRequestResponse.Request.IsKeepAlive);
+        }
+
+        [Test]
+        public void IsKeepAlive_False_Test() {
+            MemoryStream stream = GetRequestStream("GET / HTTP/1.1", "Host: Localhost", "");
+            HttpRequestResponse httpRequestResponse = new HttpRequestResponse(stream, null, null);
+
+            Assert.IsFalse(httpRequestResponse.Request.IsKeepAlive);
+        }
+
+        [Test]
+        public void PostData_On_Get_Test() {
+            MemoryStream stream = GetRequestStream("GET / HTTP/1.1", "Host: Localhost", "");
+            HttpRequestResponse httpRequestResponse = new HttpRequestResponse(stream, null, null);
+
+            Assert.AreEqual(0, httpRequestResponse.Request.PostData.Length);
+        }
+
+        [Test]
+        public void Empty_PostData_Test() {
+            MemoryStream stream = GetRequestStream("POST / HTTP/1.1", "Host: Localhost", "Content-Length: 0", "");
+            HttpRequestResponse httpRequestResponse = new HttpRequestResponse(stream, null, null);
+
+            Assert.AreEqual(0, httpRequestResponse.Request.PostData.Length);
+        }
+
+        [Test]
+        public void NonEmpty_PostData_Test() {
+            byte[] postedData = new byte[]{4, 9, 123, 87, 182, 44, 250};
+
+            MemoryStream stream = GetRequestStream("POST / HTTP/1.1", "Host: Localhost", "Content-Length: 7", "", Encoding.ASCII.GetString(postedData));
+            HttpRequestResponse httpRequestResponse = new HttpRequestResponse(stream, null, null);
+
+            Assert.AreEqual(postedData, httpRequestResponse.Request.PostData);
+        }
+
         private MemoryStream GetRequestStream(params string[] lines) {
             MemoryStream result = new MemoryStream();
             foreach(string line in lines) {
