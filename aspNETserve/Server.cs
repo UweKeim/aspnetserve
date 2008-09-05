@@ -7,6 +7,7 @@
  ************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Web;
 using System.Web.Hosting;
@@ -179,6 +180,7 @@ namespace aspNETserve {
         /// </summary>
         /// <param name="async">The IAsyncResult used to aquire to Socket.</param>
         protected virtual void ProcessRequest(IAsyncResult async) {
+            Trace.TraceInformation("Entering Server.ProcessRequest");
             Socket com = null;
             Interlocked.Increment(ref _openConnections);
             try {
@@ -198,7 +200,8 @@ namespace aspNETserve {
                 }   //otherwise we want to fall through and close this socket, and decrement the connection count.
                 com.Close();
 
-            } catch {
+            } catch(Exception ex) {
+                Trace.TraceError("Error processing request: {0}", ex.Message);
                 if (com != null) {
                     try {
                         com.Close();
@@ -206,6 +209,7 @@ namespace aspNETserve {
                 }
             } finally {
                 Interlocked.Decrement(ref _openConnections);
+                Trace.TraceInformation("Leaving Server.ProcessRequest");
             }
         }
 

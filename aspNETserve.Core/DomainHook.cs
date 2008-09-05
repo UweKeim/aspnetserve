@@ -48,12 +48,17 @@ namespace aspNETserve.Core {
         }
 
         public void ProcessTransaction(ITransaction transaction) {
+            Trace.TraceInformation("Entering DomainHook.ProcessTransaction");
             /*
              * This method is the primary reason for the DomainHook to exist.
              */
-            if(!IsConfigured)
-                throw new Exception("DomainHook has not yet been configured.");
-            _worker.ProcessTransaction(transaction);
+            try {
+                if (!IsConfigured)
+                    throw new Exception("DomainHook has not yet been configured.");
+                _worker.ProcessTransaction(transaction);
+            }finally {
+                Trace.TraceInformation("Leaving DomainHook.ProcessTransaction");   
+            }
         }
 
         private bool IsConfigured {

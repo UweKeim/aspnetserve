@@ -7,6 +7,7 @@
  ************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Web;
 using System.Web.Hosting;
@@ -28,17 +29,23 @@ namespace aspNETserve.Core {
         }
 
         public void ProcessTransaction(ITransaction transaction) {
-            ParseRequest(transaction.Request);
-            string page = _filePath;
-            if (IsRestricted(page)) {
-                throw new NotImplementedException("not implemented yet.");  //TODO: Find a way to implement the below line
-                //return Response.Error403Forbidden;
+            Trace.TraceInformation("Entering AspNetWorker.ProcessTransaction");
+            try {
+                ParseRequest(transaction.Request);
+                string page = _filePath;
+                if (IsRestricted(page)) {
+                    throw new NotImplementedException("not implemented yet.");
+                        //TODO: Find a way to implement the below line
+                    //return Response.Error403Forbidden;
+                }
+                _request = transaction.Request;
+                _response = transaction.Response;
+                _aspNetWorker.ProcessRequest(this);
+                if (_callback != null)
+                    _callback(this, _callbackPayload);
+            }finally {
+                Trace.TraceInformation("Leaving AspNetWorker.ProcessTransaction");
             }
-            _request = transaction.Request;
-            _response = transaction.Response;
-            _aspNetWorker.ProcessRequest(this);
-            if (_callback != null)
-                _callback(this, _callbackPayload);
         }
 
         public IDictionary<string, string> ServerVariables {
