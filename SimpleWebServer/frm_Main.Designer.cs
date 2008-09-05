@@ -39,13 +39,13 @@ namespace SimpleWebServer {
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugOutputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutAspNETserveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.pnlPleaseWait = new System.Windows.Forms.Panel();
             this.pnlButtons = new System.Windows.Forms.Panel();
+            this.debugOutputToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlPleaseWait.SuspendLayout();
@@ -185,23 +185,17 @@ namespace SimpleWebServer {
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.debugOutputToolStripMenuItem});
+            this.debugOutputToolStripMenuItem1});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
-            this.toolsToolStripMenuItem.Visible = false;
-            // 
-            // debugOutputToolStripMenuItem
-            // 
-            this.debugOutputToolStripMenuItem.Name = "debugOutputToolStripMenuItem";
-            this.debugOutputToolStripMenuItem.Size = new System.Drawing.Size(67, 22);
             // 
             // helpToolStripMenuItem
             // 
@@ -255,6 +249,13 @@ namespace SimpleWebServer {
             this.pnlButtons.Name = "pnlButtons";
             this.pnlButtons.Size = new System.Drawing.Size(162, 30);
             this.pnlButtons.TabIndex = 15;
+            // 
+            // debugOutputToolStripMenuItem1
+            // 
+            this.debugOutputToolStripMenuItem1.Name = "debugOutputToolStripMenuItem1";
+            this.debugOutputToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.debugOutputToolStripMenuItem1.Text = "Debug Output";
+            this.debugOutputToolStripMenuItem1.Click += new System.EventHandler(this.debugOutputToolStripMenuItem1_Click);
             // 
             // frm_Main
             // 
@@ -311,10 +312,10 @@ namespace SimpleWebServer {
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutAspNETserveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem debugOutputToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel pnlPleaseWait;
         private System.Windows.Forms.Panel pnlButtons;
+        private System.Windows.Forms.ToolStripMenuItem debugOutputToolStripMenuItem1;
     }
 }

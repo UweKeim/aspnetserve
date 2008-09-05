@@ -175,5 +175,10 @@ namespace SimpleWebServer {
         }
 
         NotifyIcon t = new NotifyIcon();
+
+        private void debugOutputToolStripMenuItem1_Click(object sender, EventArgs e) {
+            frm_DebugOutput debugOutput = new frm_DebugOutput();
+            debugOutput.Show(this);
+        }
     }
 }
