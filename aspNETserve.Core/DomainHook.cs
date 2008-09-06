@@ -13,6 +13,7 @@ using System.Web;
 using System.Threading;
 using System.Web.Hosting;
 using System.Diagnostics;
+using aspNETserve.Core.Logging;
 
 namespace aspNETserve.Core {
     /// <summary>
@@ -59,6 +60,16 @@ namespace aspNETserve.Core {
             }finally {
                 Trace.TraceInformation("Leaving DomainHook.ProcessTransaction");   
             }
+        }
+
+        public void RegisterILogger<T>(T logger) where T : MarshalByRefObject, ILogger {
+            Logger.Instance.LogExceptionEvent += logger.LogException;
+            Logger.Instance.LogMessageEvent += logger.LogMessage;
+        }
+
+        public void DeRegisterILogger<T>(T logger) where T : MarshalByRefObject, ILogger {
+            Logger.Instance.LogExceptionEvent -= logger.LogException;
+            Logger.Instance.LogMessageEvent -= logger.LogMessage;
         }
 
         private bool IsConfigured {
