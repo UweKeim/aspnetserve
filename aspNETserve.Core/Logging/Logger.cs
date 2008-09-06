@@ -7,6 +7,7 @@
  ************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace aspNETserve.Core.Logging {
@@ -40,6 +41,26 @@ namespace aspNETserve.Core.Logging {
         public event LogMessageEventHandler LogMessageEvent {
             add { _logMessageEvent += value; }
             remove { _logMessageEvent -= value; }
+        }
+
+        public void LogMemberEntry() {
+            StackTrace stack = new StackTrace();
+            StackFrame caller = stack.GetFrame(1);
+            if(caller == null)
+                return;
+            string memberName = string.Format("{0}.{1}", caller.GetMethod().DeclaringType.Name, caller.GetMethod().Name);
+
+            LogMessage(LogLevel.Debug, string.Format("Entering {0}", memberName));
+        }
+        
+        public void LogMemberExit() {
+            StackTrace stack = new StackTrace();
+            StackFrame caller = stack.GetFrame(1);
+            if (caller == null)
+                return;
+            string memberName = string.Format("{0}.{1}", caller.GetMethod().DeclaringType.Name, caller.GetMethod().Name);
+
+            LogMessage(LogLevel.Debug, string.Format("Leaving {0}", memberName));            
         }
 
         public static Logger Instance {

@@ -14,6 +14,8 @@ namespace aspNETserve.Core.Logging {
         void LogException(LogLevel level, string message, Exception ex);
         void LogException(LogLevel level, Exception ex);
         void LogMessage(LogLevel level, string message);
+        void LogMemberEntry();
+        void LogMemberExit();
         event LogExceptionEventHandler LogExceptionEvent;
         event LogMessageEventHandler LogMessageEvent;
     }
