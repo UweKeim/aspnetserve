@@ -10,32 +10,47 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace aspNETserve.Core.Logging {
-    public static class Logger {
-        private static event LogExceptionEventHandler _logExceptionEvent;
-        private static event LogMessageEventHandler _logMessageEvent;
 
-        public static void LogException(LogLevel level, string message, Exception ex) {
+    public class Logger : MarshalByRefObject, ILogger {
+
+        private Logger(){}
+
+        private event LogExceptionEventHandler _logExceptionEvent;
+        private event LogMessageEventHandler _logMessageEvent;
+
+        public void LogException(LogLevel level, string message, Exception ex) {
             if (_logExceptionEvent != null)
                 _logExceptionEvent(level, message, ex);
         }
 
-        public static void LogException(LogLevel level, Exception ex) {
+        public void LogException(LogLevel level, Exception ex) {
             LogException(level, string.Empty, ex);
         }
 
-        public static void LogMessage(LogLevel level, string message) {
+        public void LogMessage(LogLevel level, string message) {
             if (_logMessageEvent != null)
                 _logMessageEvent(level, message);
         }
 
-        public static event LogExceptionEventHandler LogExceptionEvent {
+        public event LogExceptionEventHandler LogExceptionEvent {
             add { _logExceptionEvent += value; }
             remove { _logExceptionEvent -= value; }
         }
 
-        public static event LogMessageEventHandler LogMessageEvent {
+        public event LogMessageEventHandler LogMessageEvent {
             add { _logMessageEvent += value; }
             remove { _logMessageEvent -= value; }
+        }
+
+        public static Logger Instance {
+            //fully lazy instantiation technique inspired by
+            //http://www.yoda.arachsys.com/csharp/singleton.html
+            get { return Helper._loggerInstance; }
+        }
+
+        private class Helper {
+            static Helper(){}
+            internal static readonly Logger _loggerInstance = new Logger();
         }
     }
 }
