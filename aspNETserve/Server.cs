@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Threading;
 using aspNETserve.Core;
 using aspNETserve.Configuration;
+using aspNETserve.Core.Logging;
 
 namespace aspNETserve {
     /// <summary>
@@ -76,6 +77,7 @@ namespace aspNETserve {
             try {
                 _domainHook = _appManager.CreateObject(_appId, typeof(DomainHook), _virtualDir, _physicalDir, false) as DomainHook;
                 _domainHook.Configure(_virtualDir, _physicalDir, _serverVariables);
+                _domainHook.RegisterILogger(Logger.Instance);
                 _sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 _sock.Bind(new IPEndPoint(_endPoint, _port));
                 _sock.Listen(100);
@@ -92,6 +94,7 @@ namespace aspNETserve {
             if (_sock != null) {
                 SetStatus(ServerStatus.ShuttingDown);
                 _sock.Close();  //stop accepting connections
+                _domainHook.DeRegisterILogger(Logger.Instance);
                 _domainHook.Dispose();    //this will call InitiateShutdown from within the app domain
             }
             _sock = null;
@@ -180,7 +183,7 @@ namespace aspNETserve {
         /// </summary>
         /// <param name="async">The IAsyncResult used to aquire to Socket.</param>
         protected virtual void ProcessRequest(IAsyncResult async) {
-            Trace.TraceInformation("Entering Server.ProcessRequest");
+            Logger.Instance.LogMemberEntry();
             Socket com = null;
             Interlocked.Increment(ref _openConnections);
             try {
@@ -201,7 +204,7 @@ namespace aspNETserve {
                 com.Close();
 
             } catch(Exception ex) {
-                Trace.TraceError("Error processing request: {0}", ex.Message);
+                Logger.Instance.LogException(LogLevel.Error, "Error processing request", ex);
                 if (com != null) {
                     try {
                         com.Close();
@@ -209,7 +212,7 @@ namespace aspNETserve {
                 }
             } finally {
                 Interlocked.Decrement(ref _openConnections);
-                Trace.TraceInformation("Leaving Server.ProcessRequest");
+                Logger.Instance.LogMemberExit();
             }
         }
 
