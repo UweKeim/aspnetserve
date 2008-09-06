@@ -30,7 +30,7 @@ namespace aspNETserve {
         private string _virtualDir;
         private string _physicalDir;
         private Socket _sock;
-        private DomainHook _host;
+        private DomainHook _domainHook;
         private ApplicationManager _appManager;
         private IDictionary<string, string> _serverVariables;
         private ServerStatus _status = ServerStatus.Stopped;
@@ -74,8 +74,8 @@ namespace aspNETserve {
             _openConnections = 0;
             SetStatus(ServerStatus.Starting);
             try {
-                _host = _appManager.CreateObject(_appId, typeof(DomainHook), _virtualDir, _physicalDir, false) as DomainHook;
-                _host.Configure(_virtualDir, _physicalDir, _serverVariables);
+                _domainHook = _appManager.CreateObject(_appId, typeof(DomainHook), _virtualDir, _physicalDir, false) as DomainHook;
+                _domainHook.Configure(_virtualDir, _physicalDir, _serverVariables);
                 _sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 _sock.Bind(new IPEndPoint(_endPoint, _port));
                 _sock.Listen(100);
@@ -92,7 +92,7 @@ namespace aspNETserve {
             if (_sock != null) {
                 SetStatus(ServerStatus.ShuttingDown);
                 _sock.Close();  //stop accepting connections
-                _host.Dispose();    //this will call InitiateShutdown from within the app domain
+                _domainHook.Dispose();    //this will call InitiateShutdown from within the app domain
             }
             _sock = null;
             SetStatus(ServerStatus.Stopped);
@@ -193,7 +193,7 @@ namespace aspNETserve {
                     do {
                         int timeout = transaction == null ? _initialRequestTimeout : _keepAliveRequestTimeout; //the initial request and subsequent requests may have different timeouts
                         transaction = new HttpRequestResponse(new NetworkStream(com, false), (IPEndPoint)com.LocalEndPoint, (IPEndPoint)com.RemoteEndPoint, timeout);
-                        _host.ProcessTransaction(transaction);
+                        _domainHook.ProcessTransaction(transaction);
                         transaction.Response.Flush();
                     } while (transaction.Request.IsKeepAlive);  //loop while the client wants to "keep alive".
 
@@ -247,9 +247,9 @@ namespace aspNETserve {
             set { _sock = value; }
         }
 
-        protected DomainHook Host {
-            get { return _host; }
-            set { _host = value; }
+        protected DomainHook DomainHook {
+            get { return _domainHook; }
+            set { _domainHook = value; }
         }
 
         protected ApplicationManager AppManager {
