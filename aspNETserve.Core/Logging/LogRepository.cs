@@ -47,14 +47,16 @@ namespace aspNETserve.Core.Logging {
         }
 
         protected virtual void LogExceptionEventHandler(LogLevel level, string message, Exception ex) {
-            throw new NotImplementedException();
+            StackFrame callingFrame = GetCallingFrame();
+
+            Write(callingFrame, DateTime.Now, EventType.Exception, message, ex.Message);
         }
 
         protected virtual void LogMessageEventHandler(LogLevel level, string message) {
             throw new NotImplementedException();
         }
 
-        protected virtual void Write(MemberInfo callingMember, DateTime eventTime, EventType eventType, string message, params string[] fields) {
+        protected virtual void Write(StackFrame callingFrame, DateTime eventTime, EventType eventType, string message, params string[] fields) {
             throw new NotImplementedException();
         }
 
@@ -62,9 +64,9 @@ namespace aspNETserve.Core.Logging {
         /// Gets the first calling member that does not implement ILogger
         /// </summary>
         /// <returns></returns>
-        private MemberInfo GetCallingMember() {
+        private StackFrame GetCallingFrame() {
             StackTrace stackTrace = new StackTrace(); 
-            MemberInfo result = null;
+            StackFrame result = null;
 
             for (int i = 0; i != stackTrace.FrameCount; i++) {
                 StackFrame frame = stackTrace.GetFrame(i);
@@ -73,7 +75,7 @@ namespace aspNETserve.Core.Logging {
                     if (!method.DeclaringType.IsSubclassOf(GetType())) {
                         //if we've made it here, then the frame in the stack trace is not
                         //from an ILogger and not from this (or a decendent of this) class.
-                        result = method;
+                        result = frame;
                         break;
                     }
                 }
