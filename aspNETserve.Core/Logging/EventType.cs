@@ -11,5 +11,7 @@ using System.Text;
 
 namespace aspNETserve.Core.Logging {
     public enum EventType {
+        Exception,
+        Message
     }
 }
