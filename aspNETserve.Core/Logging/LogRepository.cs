@@ -7,6 +7,7 @@
  ************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -57,5 +58,28 @@ namespace aspNETserve.Core.Logging {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets the first calling member that does not implement ILogger
+        /// </summary>
+        /// <returns></returns>
+        private MemberInfo GetCallingMember() {
+            StackTrace stackTrace = new StackTrace(); 
+            MemberInfo result = null;
+
+            for (int i = 0; i != stackTrace.FrameCount; i++) {
+                StackFrame frame = stackTrace.GetFrame(i);
+                MethodBase method = frame.GetMethod();
+                if(method.DeclaringType.GetInterface(typeof(ILogger).ToString()) == null) {
+                    if (!method.DeclaringType.IsSubclassOf(GetType())) {
+                        //if we've made it here, then the frame in the stack trace is not
+                        //from an ILogger and not from this (or a decendent of this) class.
+                        result = method;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
