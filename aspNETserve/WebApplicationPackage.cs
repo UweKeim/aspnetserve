@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
+using Ionic.Utils.Zip;
 
 namespace aspNETserve {
     /// <summary>
@@ -83,30 +82,9 @@ namespace aspNETserve {
         }
 
         protected virtual void ExtractWapToPath(string path) {
-            /*
-             * This method is not as effecient as it could be.
-             * It takes a stream (which could be a filestream)
-             * and writes it out to disk, before it extracts
-             * the compressed contents. For large files that
-             * already exist on disk, this is wasteful.
-             * 
-             * This was a trade off of developer time vs.
-             * computer time. Perhaps in the future this will
-             * be revisited.
-             */ 
-            string tempFilename = Path.GetRandomFileName();
-            string zipFilename = Path.Combine(path, tempFilename);
-            byte[] buffer = new byte[_bufferSize];
-
-            using (FileStream zipFile = File.Create(zipFilename)) {
-                StreamUtils.Copy(_stream, zipFile, buffer);
-                zipFile.Close();
+            using(ZipFile zipFile = new ZipFile(_stream)) {
+                zipFile.ExtractAll(path);
             }
-
-            FastZip fz = new FastZip();
-            fz.ExtractZip(zipFilename, path, string.Empty);
-
-            File.Delete(zipFilename);
         }
 
         protected virtual void DeleteDirectory(string path) {
