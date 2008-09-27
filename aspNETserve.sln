@@ -4,9 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{4496822D-C12E-437A-9334-7A46E619CDCF}"
 	ProjectSection(SolutionItems) = preProject
 		aspNETserve.build = aspNETserve.build
+		Setup\aspNETserve.wxs = Setup\aspNETserve.wxs
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		license.txt = license.txt
 		nant.bat = nant.bat
+		Setup\SdkCabinet.ddf = Setup\SdkCabinet.ddf
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWebServer", "SimpleWebServer\SimpleWebServer.csproj", "{2794FDA8-9853-4835-B110-EE03C6DAF21A}"

@@ -13,6 +13,27 @@
     </msbuild>
   </target>
 
+  <target name="BuildInstaller" depends="build">
+    <delete dir="./setup/bin" />
+    <mkdir dir="./setup/bin" />
+    <exec program="makecab.exe">
+      <arg value="/F" />
+      <arg value="./setup/SdkCabinet.ddf" />
+    </exec>
+    <exec program="./tools/wix/candle.exe">
+      <arg value="-out" />
+      <arg value="./setup/bin/aspNETserve.wixobj" />
+      <arg value="./setup/aspNETserve.wxs" />
+    </exec>
+    <exec program="./tools/wix/light.exe">
+      <arg value="-b" />
+      <arg value="./setup" />
+      <arg value="-out" />
+      <arg value="./setup/bin/aspNETserve.msi" />
+      <arg value="./setup/bin/aspNETserve.wixobj" />
+    </exec>
+  </target>
+
   <target name="GacInstall">
     <!-- "C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\gacutil.exe" -i aspNETserve.Core.dll -->
     <exec program="gacutil.exe">

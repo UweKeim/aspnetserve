@@ -1,0 +1,12 @@
+;*** Sample Source Code MakeCAB Directive file example
+;
+.OPTION EXPLICIT ; Generate errors
+.Set CabinetNameTemplate=aspNETserve.cab
+.Set CompressionType=MSZIP;** All files are compressed in cabinet files
+.Set Cabinet=on
+.Set DiskDirectory1=setup/bin
+aspNETserve/bin/release/aspNETserve.dll
+aspNETserve/bin/release/aspNETserve.Core.dll
+aspNETserve/bin/release/Ionic.Utils.Zip.dll
+aspNETserve/bin/release/license.txt
+;EOF
