@@ -16,10 +16,21 @@
   <target name="BuildInstaller" depends="build">
     <delete dir="./setup/bin" />
     <mkdir dir="./setup/bin" />
-    <exec program="makecab.exe">
-      <arg value="/F" />
-      <arg value="./setup/SdkCabinet.ddf" />
-    </exec>
+    <copy todir="./setup/bin">
+      <fileset basedir="./aspNETserve/bin/Release">
+        <include name="*.*" />
+      </fileset>
+    </copy>
+    <copy todir="./setup/bin">
+      <fileset basedir="./aspNETserve.Ice/bin/Release">
+        <include name="*.*" />
+      </fileset>
+    </copy>
+    <copy todir="./setup/bin">
+      <fileset basedir="./SimpleWebServer/bin/Release">
+        <include name="*.*"/>
+      </fileset>
+    </copy>
     <exec program="./tools/wix/candle.exe">
       <arg value="-out" />
       <arg value="./setup/bin/aspNETserve.wixobj" />
