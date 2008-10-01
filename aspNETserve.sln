@@ -6,6 +6,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{
 		aspNETserve.build = aspNETserve.build
 		Setup\aspNETserve.wxs = Setup\aspNETserve.wxs
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
+		License.rtf = License.rtf
 		license.txt = license.txt
 		nant.bat = nant.bat
 	EndProjectSection

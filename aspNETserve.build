@@ -36,6 +36,7 @@
         <include name="*.*"/>
       </fileset>
     </copy>
+    <copy file="License.rtf" tofile="./setup/bin/License.rtf" />
     <exec program="./tools/wix/candle.exe">
       <arg value="-out" />
       <arg value="./setup/bin/aspNETserve.wixobj" />
