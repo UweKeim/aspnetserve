@@ -41,12 +41,16 @@
       <arg value="./setup/bin/aspNETserve.wixobj" />
       <arg value="./setup/aspNETserve.wxs" />
     </exec>
+    <!-- path\lib\wixui.wixlib -loc path\lib\WixUI_en-us.wxl -->
     <exec program="./tools/wix/light.exe">
       <arg value="-b" />
       <arg value="./setup" />
       <arg value="-out" />
       <arg value="./setup/bin/aspNETserve.msi" />
       <arg value="./setup/bin/aspNETserve.wixobj" />
+      <arg value="./tools/wix/wixui.wixlib" />
+      <arg value="-loc" />
+      <arg value="./tools/wix/WixUI_en-us.wxl" />
     </exec>
   </target>
 
