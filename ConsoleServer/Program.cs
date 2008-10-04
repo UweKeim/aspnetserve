@@ -20,13 +20,41 @@ namespace ConsoleServer {
         static void Main(string[] args) {
             Console.WriteLine("aspNETserve console server");
             Console.Write("IP: ");
-            string rawIp = Console.ReadLine();
+
+            string rawIp;
+            if (string.IsNullOrEmpty(args[0])) {
+                rawIp = Console.ReadLine();
+            }else {
+                rawIp = args[0];
+                Console.WriteLine(rawIp);
+            }
+
             Console.Write("Port: ");
-            string port = Console.ReadLine();
+            string port;
+            if (string.IsNullOrEmpty(args[1])) {
+                port = Console.ReadLine();
+            }else {
+                port = args[1];
+                Console.WriteLine(port);
+            }
+
             Console.Write("Physical Path: ");
-            string physicalPath = Console.ReadLine();
+            string physicalPath;
+            if (string.IsNullOrEmpty(args[2])) {
+                physicalPath = Console.ReadLine();
+            }else {
+                physicalPath = args[2];
+                Console.WriteLine(physicalPath);
+            }
+
             Console.Write("Virtual Path: ");
-            string virtualPath = Console.ReadLine();
+            string virtualPath;
+            if (string.IsNullOrEmpty(args[3])) {
+                virtualPath = Console.ReadLine();
+            }else {
+                virtualPath = args[3];
+                Console.WriteLine(virtualPath);
+            }
 
             Console.WriteLine();
             Console.Write("Starting...");
