@@ -77,7 +77,6 @@ namespace aspNETserve {
             try {
                 _domainHook = _appManager.CreateObject(_appId, typeof(DomainHook), _virtualDir, _physicalDir, false) as DomainHook;
                 _domainHook.Configure(_virtualDir, _physicalDir, _serverVariables);
-                _domainHook.RegisterILogger(Logger.Instance);
                 _sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 _sock.Bind(new IPEndPoint(_endPoint, _port));
                 _sock.Listen(100);
@@ -94,7 +93,6 @@ namespace aspNETserve {
             if (_sock != null) {
                 SetStatus(ServerStatus.ShuttingDown);
                 _sock.Close();  //stop accepting connections
-                _domainHook.DeRegisterILogger(Logger.Instance);
                 _domainHook.Dispose();    //this will call InitiateShutdown from within the app domain
             }
             _sock = null;
