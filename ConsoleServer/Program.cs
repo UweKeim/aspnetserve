@@ -22,7 +22,7 @@ namespace ConsoleServer {
             Console.Write("IP: ");
 
             string rawIp;
-            if (string.IsNullOrEmpty(args[0])) {
+            if (args.Length < 1) {
                 rawIp = Console.ReadLine();
             }else {
                 rawIp = args[0];
@@ -31,7 +31,7 @@ namespace ConsoleServer {
 
             Console.Write("Port: ");
             string port;
-            if (string.IsNullOrEmpty(args[1])) {
+            if (args.Length < 2) {
                 port = Console.ReadLine();
             }else {
                 port = args[1];
@@ -40,7 +40,7 @@ namespace ConsoleServer {
 
             Console.Write("Physical Path: ");
             string physicalPath;
-            if (string.IsNullOrEmpty(args[2])) {
+            if (args.Length < 3) {
                 physicalPath = Console.ReadLine();
             }else {
                 physicalPath = args[2];
@@ -49,7 +49,7 @@ namespace ConsoleServer {
 
             Console.Write("Virtual Path: ");
             string virtualPath;
-            if (string.IsNullOrEmpty(args[3])) {
+            if (args.Length < 4) {
                 virtualPath = Console.ReadLine();
             }else {
                 virtualPath = args[3];
