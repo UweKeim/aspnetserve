@@ -62,16 +62,6 @@ namespace aspNETserve.Core {
             }
         }
 
-        public void RegisterILogger<T>(T logger) where T : MarshalByRefObject, ILogger {
-            Logger.Instance.LogExceptionEvent += logger.LogException;
-            Logger.Instance.LogMessageEvent += logger.LogMessage;
-        }
-
-        public void DeRegisterILogger<T>(T logger) where T : MarshalByRefObject, ILogger {
-            Logger.Instance.LogExceptionEvent -= logger.LogException;
-            Logger.Instance.LogMessageEvent -= logger.LogMessage;
-        }
-
         private bool IsConfigured {
             get { return _worker != null; }
         }
