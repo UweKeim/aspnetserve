@@ -82,7 +82,7 @@ namespace aspNETserve {
         }
 
         protected virtual void ExtractWapToPath(string path) {
-            using(ZipFile zipFile = new ZipFile(_stream)) {
+            using(ZipFile zipFile = ZipFile.Read(path)) {
                 zipFile.ExtractAll(path);
             }
         }
