@@ -17,3 +17,7 @@ right from Windows Explorer allows you to easily experience web projects without
 YourKit is kindly supporting open source projects with its full-featured .NET Profiler. 
 YourKit, LLC is the creator of innovative and intelligent tools for profiling .NET and Java applications. 
 Take a look at YourKit's leading software products: YourKit .NET Profiler and YourKit Java Profiler.
+
+--
+
+2015-10-11, Uwe Keim: I've copied this repository from [Google Code](http://code.google.com/p/aspnetserve) to save it from disappearing when Google Code shuts down.
