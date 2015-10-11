@@ -18,6 +18,7 @@ YourKit is kindly supporting open source projects with its full-featured .NET Pr
 YourKit, LLC is the creator of innovative and intelligent tools for profiling .NET and Java applications. 
 Take a look at YourKit's leading software products: YourKit .NET Profiler and YourKit Java Profiler.
 
---
+## Remarks Uwe Keim
 
-2015-10-11, Uwe Keim: I've copied this repository from [Google Code](http://code.google.com/p/aspnetserve) to save it from disappearing when Google Code shuts down.
+- 2015-10-11, Uwe Keim: I've copied this repository from [Google Code](http://code.google.com/p/aspnetserve) to save it from disappearing when Google Code shuts down.
+- 2015-10-11, Uwe Keim: Alternatives to this web server are [Abyss Web Server from Aprelium](http://www.aprelium.com/abyssws/features.html) and [UltiDev Web Server Pro](http://www.ultidev.com/products/UWS-Cassini-Pro/).
